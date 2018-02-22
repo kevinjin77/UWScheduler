@@ -1,5 +1,6 @@
 const uwApiKey = "a0fa5a0445627c840d18a3cf30d89995";
 const googleApiKey = "AIzaSyDbxPyrNeLrgCJE_Fip-jqXcIJj3BzTLEw";
+var done = false;
 
 function processDate(weekdays) {
   var index = 0;
@@ -39,7 +40,7 @@ function isTimeConflict(start1, end1, start2, end2) {
 }
 
 function isConflict(course1, course2) {
-  if (!(course1.section.includes("LEC") || course2.section.includes("LEC"))) {
+  if (!(course1.section.includes("LEC") && course2.section.includes("LEC"))) {
     return true
   }
   let class1 = course1.classes[0]
@@ -62,6 +63,7 @@ const f = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
 const cartesian = (a, b, ...c) => (b ? cartesian(f(a, b), ...c) : a);
 
 function submit() {
+  done = false;
   var term = document.getElementById('term').value
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
@@ -89,7 +91,7 @@ function submit() {
       }
       courses.push(response.data)
     }).then(() => {
-      let schedules = generateSchedules(courses)
+      generateSchedules(courses)
     })
   }
 }
@@ -112,9 +114,7 @@ function generateSchedules(courses) {
     isScheduleValid(schedule)
   )
   getTimes(schedules)
-  // calculateDistanceRating(schedules)
   calculateProfessorRating(schedules)
-  return schedules
 }
 
 function compareTimes(time1, time2) {
@@ -274,18 +274,19 @@ function calculateProfessorRating(schedules) {
       //   })
       // } else {
       noRes = (response.professors.length === 0)
-      let rating = noRes ? 2 : parseFloat(response.professors[0].overall_rating)
+      let rating = noRes ? -1 : parseFloat(response.professors[0].overall_rating)
       profsRatings.push([profs[i], rating])
       // }
     }).then(() => {
-      if (profsRatings.length === profs.length) {
+      if (profsRatings.length === profs.length && !done) {
+        done = true;
         let profsMap = new Map(profsRatings)
         schedules.forEach((schedule) => {
           let totalRating = 0
           for (let i = 0; i < schedule.length; ++i) {
-            let rating = profsMap.get(schedule[i].classes[0].instructors[0]) ?
-            profsMap.get(schedule[i].classes[0].instructors[0]) : 2
-            schedule[i].classes[0].rating = rating
+            let score = profsMap.get(schedule[i].classes[0].instructors[0])
+            let rating = (!score || score === -1) ? 2 : score
+            schedule[i].classes[0].rating = (!score || score === -1) ? 'Not Found' : score
             totalRating += rating
           }
           schedule.professorRating = totalRating / schedule.length
@@ -355,20 +356,52 @@ function calculateRating(schedules) {
     schedule.lunchRating +
     schedule.gapRating
   })
+  console.log(schedules)
   schedules.sort((a, b) => b.overallRating - a.overallRating)
-  printSchedules(schedules[0])
+  printSchedule(schedules[0])
 }
 
-function printSchedules(schedule) {
-  let courseName = schedule[0].subject + ' ' + schedule[0].catalog_number;
-  let courseSection = schedule[0].section;
-  let courseTitle = schedule[0].title;
-  let courseTimes = schedule[0].classes[0].date.weekdays + ' '
-  + schedule[0].classes[0].date.start_time + ' - ' + schedule[0].classes[0].date.end_time
-  let courseProfessor = schedule[0].classes[0].instructors[0];
-  let courseLocation = schedule[0].classes[0].location.building + ' '
-  + schedule[0].classes[0].location.room;
-  let courseRating = schedule[0].classes[0].rating
-  document.getElementById("listcourse1").innerHTML =
-  courseName + courseTitle + courseSection + courseProfessor + courseTimes + courseLocation + courseRating;
+function printClass(myClass) {
+  let courseName = myClass.subject + ' ' + myClass.catalog_number;
+  let courseTitle = myClass.title;
+  let courseSection = myClass.section;
+  let courseEnrollment = myClass.enrollment_total + '/' + myClass.enrollment_capacity;
+  let courseTimes =  myClass.classes[0].date.start_time + ' - ' + myClass.classes[0].date.end_time
+  + ' ' + myClass.classes[0].date.weekdays;
+  let courseLocation = myClass.classes[0].location.building + ' '
+  + myClass.classes[0].location.room;
+  let courseProfessor = myClass.classes[0].instructors[0];
+  let courseRating = myClass.classes[0].rating
+
+  let table = document.getElementById('schedules');
+  let tr = document.createElement('tr');
+  var name = document.createElement('th');
+  name.setAttribute('scope', 'row');
+  name.appendChild(document.createTextNode(courseName));
+  var section = document.createElement('td');
+  section.appendChild(document.createTextNode(courseSection));
+  var enrolled = document.createElement('td');
+  enrolled.appendChild(document.createTextNode(courseEnrollment));
+  var time = document.createElement('td');
+  time.appendChild(document.createTextNode(courseTimes));
+  var location = document.createElement('td');
+  location.appendChild(document.createTextNode(courseLocation));
+  var instructor = document.createElement('td');
+  instructor.appendChild(document.createTextNode(courseProfessor));
+  var rating = document.createElement('td');
+  rating.appendChild(document.createTextNode(courseRating));
+  tr.appendChild(name);
+  tr.appendChild(section);
+  tr.appendChild(enrolled);
+  tr.appendChild(time);
+  tr.appendChild(location);
+  tr.appendChild(instructor);
+  tr.appendChild(rating);
+  table.appendChild(tr);
+}
+
+function printSchedule(schedule) {
+  schedule.forEach(myClass => {
+    printClass(myClass);
+  })
 }
