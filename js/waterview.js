@@ -111,11 +111,9 @@ function generateSchedules(courses) {
   let schedules = cartesian(courses[0], courses[1], courses[2], courses[3], courses[4]).filter(schedule =>
     isScheduleValid(schedule)
   )
-  console.log(schedules)
   getTimes(schedules)
-  calculateDistanceRating(schedules)
-  console.log(schedules)
-  calculateRating(schedules)
+  // calculateDistanceRating(schedules)
+  calculateProfessorRating(schedules)
   return schedules
 }
 
@@ -163,73 +161,73 @@ function getTimes(schedules) {
   })
 }
 
-function calculateDistanceRating(schedules) {
-  var buildings = []
-  schedules.forEach(schedule => {
-    for (let i = 0; i < schedule.length; ++i) {
-      let building = schedule[i].classes[0].location.building
-      if (building && !buildings.includes(building)) {
-        buildings.push(building)
-      }
-    }
-  })
-  var buildingCoords = []
-  var buildingDistances = []
-  for (let i = 0; i < buildings.length; ++i) {
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": `https://api.uwaterloo.ca/v2/buildings/${buildings[i]}.json?key=${uwApiKey}`,
-      "method": "GET"
-    }
-
-    $.ajax(settings).then(function (response) {
-      noRes = (response.data.length === 0)
-      let coords = noRes ? [buildings[i], {latitude: 43.47207511, longitude: -80.54394739}] :
-      [buildings[i], {latitude: parseFloat(response.data.latitude),
-        longitude: parseFloat(response.data.longitude)}]
-      buildingCoords.push(coords)
-    }).then(() => {
-      if (buildingCoords.length === buildings.length) {
-        var buildingMap = new Map(buildingCoords)
-        for (let i = 0; i < buildings.length - 1; ++i) {
-          for (let j = i + 1; j < buildings.length; ++j) {
-            let lat1 = buildingMap.get(buildings[i]).latitude
-            let long1 = buildingMap.get(buildings[i]).longitude
-            let lat2 = buildingMap.get(buildings[j]).latitude
-            let long2 = buildingMap.get(buildings[j]).longitude
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat1},${long1}&destinations=${lat2},${long2}&mode=walking&key=${googleApiKey}`,
-              "method": "GET"
-            }
-
-            $.ajax(settings).then(function (response) {
-              console.log(response)
-              buildingDistances.push([buildings[i] + buildings[j],
-                response.rows[0].elements[0].duration.value])
-            })
-          }
-        }
-      }
-    }).then(() => {
-      if (buildingDistances.length === (buildings.length * buildings.length - 1) / 2) {
-        let distanceMap = new Map(buildingDistances)
-        schedules.forEach((schedule) => {
-          let totalRating = 0
-          for (let i = 0; i < schedule.length; ++i) {
-            let rating = profsMap.get(schedule[i].classes[0].instructors[0]) ?
-            profsMap.get(schedule[i].classes[0].instructors[0]) : 2
-            schedule[i].classes[0].rating = rating
-            totalRating += rating
-          }
-          schedule.professorRating = totalRating / schedule.length
-        })
-      }
-    })
-  }
-}
+// function calculateDistanceRating(schedules) {
+//   var buildings = []
+//   schedules.forEach(schedule => {
+//     for (let i = 0; i < schedule.length; ++i) {
+//       let building = schedule[i].classes[0].location.building
+//       if (building && !buildings.includes(building)) {
+//         buildings.push(building)
+//       }
+//     }
+//   })
+//   var buildingCoords = []
+//   var buildingDistances = []
+//   for (let i = 0; i < buildings.length; ++i) {
+//     var settings = {
+//       "async": true,
+//       "crossDomain": true,
+//       "url": `https://api.uwaterloo.ca/v2/buildings/${buildings[i]}.json?key=${uwApiKey}`,
+//       "method": "GET"
+//     }
+//
+//     $.ajax(settings).then(function (response) {
+//       noRes = (response.data.length === 0)
+//       let coords = noRes ? [buildings[i], {latitude: 43.47207511, longitude: -80.54394739}] :
+//       [buildings[i], {latitude: parseFloat(response.data.latitude),
+//         longitude: parseFloat(response.data.longitude)}]
+//       buildingCoords.push(coords)
+//     }).then(() => {
+//       if (buildingCoords.length === buildings.length) {
+//         var buildingMap = new Map(buildingCoords)
+//         for (let i = 0; i < buildings.length - 1; ++i) {
+//           for (let j = i + 1; j < buildings.length; ++j) {
+//             let lat1 = buildingMap.get(buildings[i]).latitude
+//             let long1 = buildingMap.get(buildings[i]).longitude
+//             let lat2 = buildingMap.get(buildings[j]).latitude
+//             let long2 = buildingMap.get(buildings[j]).longitude
+//             var settings = {
+//               "async": true,
+//               "crossDomain": true,
+//               "url": `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat1},${long1}&destinations=${lat2},${long2}&mode=walking&key=${googleApiKey}`,
+//               "method": "GET"
+//             }
+//
+//             $.ajax(settings).then(function (response) {
+//               console.log(response)
+//               buildingDistances.push([buildings[i] + buildings[j],
+//                 response.rows[0].elements[0].duration.value])
+//             })
+//           }
+//         }
+//       }
+//     }).then(() => {
+//       if (buildingDistances.length === (buildings.length * buildings.length - 1) / 2) {
+//         let distanceMap = new Map(buildingDistances)
+//         schedules.forEach((schedule) => {
+//           let totalRating = 0
+//           for (let i = 0; i < schedule.length; ++i) {
+//             let rating = profsMap.get(schedule[i].classes[0].instructors[0]) ?
+//             profsMap.get(schedule[i].classes[0].instructors[0]) : 2
+//             schedule[i].classes[0].rating = rating
+//             totalRating += rating
+//           }
+//           schedule.professorRating = totalRating / schedule.length
+//         })
+//       }
+//     })
+//   }
+// }
 
 function calculateProfessorRating(schedules) {
   var profs = []
@@ -294,7 +292,7 @@ function calculateProfessorRating(schedules) {
         })
         calculateGapRating(schedules)
         calculateLunchRating(schedules)
-        console.log(schedules)
+        calculateRating(schedules)
       }
     })
   }
@@ -352,19 +350,25 @@ function calculateLunchRating(schedules) {
 }
 
 function calculateRating(schedules) {
-  let gapWeight = 1
-  let lunchWeight = 1
-  let distanceWeight = 1
-  let professorWeight = 20
-  calculateProfessorRating(schedules)
-  schedules.forEach((schedule) => {
-    calculateGapRating(schedule)
-    calculateLunchRating(schedule)
-    calculateDistanceRating(schedule)
-    schedule.overallRating =
-    (schedule.gapRating * gapWeight
-      + schedule.lunchRating * lunchWeight
-      + schedule.distanceRating * distanceWeight
-      + schedule.professorRating * professorWeight) / 4
+  schedules.forEach(schedule => {
+    schedule.overallRating = schedule.professorRating * 20 +
+    schedule.lunchRating +
+    schedule.gapRating
   })
+  schedules.sort((a, b) => b.overallRating - a.overallRating)
+  printSchedules(schedules[0])
+}
+
+function printSchedules(schedule) {
+  let courseName = schedule[0].subject + ' ' + schedule[0].catalog_number;
+  let courseSection = schedule[0].section;
+  let courseTitle = schedule[0].title;
+  let courseTimes = schedule[0].classes[0].date.weekdays + ' '
+  + schedule[0].classes[0].date.start_time + ' - ' + schedule[0].classes[0].date.end_time
+  let courseProfessor = schedule[0].classes[0].instructors[0];
+  let courseLocation = schedule[0].classes[0].location.building + ' '
+  + schedule[0].classes[0].location.room;
+  let courseRating = schedule[0].classes[0].rating
+  document.getElementById("listcourse1").innerHTML =
+  courseName + courseTitle + courseSection + courseProfessor + courseTimes + courseLocation + courseRating;
 }
