@@ -64,6 +64,11 @@ const cartesian = (a, b, ...c) => (b ? cartesian(f(a, b), ...c) : a);
 
 function submit() {
   done = false;
+  var myNode = document.getElementById("schedules");
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.firstChild);
+  }
+
   var term = document.getElementById('term').value
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
@@ -358,10 +363,10 @@ function calculateRating(schedules) {
   })
   console.log(schedules)
   schedules.sort((a, b) => b.overallRating - a.overallRating)
-  printSchedule(schedules[0])
+  printSchedules(schedules)
 }
 
-function printClass(myClass) {
+function printClass(myClass, index) {
   let courseName = myClass.subject + ' ' + myClass.catalog_number;
   let courseTitle = myClass.title;
   let courseSection = myClass.section;
@@ -371,9 +376,9 @@ function printClass(myClass) {
   let courseLocation = myClass.classes[0].location.building + ' '
   + myClass.classes[0].location.room;
   let courseProfessor = myClass.classes[0].instructors[0];
-  let courseRating = myClass.classes[0].rating
+  let courseRating = myClass.classes[0].rating.toFixed(1)
 
-  let table = document.getElementById('schedules');
+  let table = document.getElementById('schedules' + index);
   let tr = document.createElement('tr');
   var name = document.createElement('th');
   name.setAttribute('scope', 'row');
@@ -400,8 +405,40 @@ function printClass(myClass) {
   table.appendChild(tr);
 }
 
-function printSchedule(schedule) {
+function printClasses(schedule, index) {
   schedule.forEach(myClass => {
-    printClass(myClass);
+    printClass(myClass, index);
   })
+}
+
+function printSchedules(schedules) {
+  for (let i = 0; i < 100; ++i) {
+    let div = document.getElementById('schedules');
+    let table = document.createElement('table');
+    table.setAttribute('class', 'table table-sm');
+    let thead = document.createElement('thead');
+    table.appendChild(thead);
+    let tr = document.createElement('tr');
+    thead.appendChild(tr);
+    let headers = ['Course', 'Section', 'Enrolled', 'Time', 'Location', 'Instructor', 'Instructor Rating'];
+    headers.forEach(header => {
+      let th = document.createElement('th');
+      th.setAttribute('scope', 'row');
+      th.appendChild(document.createTextNode(header));
+      tr.appendChild(th);
+    })
+    let tbody = document.createElement('tbody');
+    tbody.setAttribute('id', 'schedules' + i);
+    table.appendChild(tbody);
+    div.appendChild(table);
+    let p = document.createElement('p');
+    let details = 'More Details:\n'
+    + `Gap Rating: ${schedules[i].gapRating}\n`
+    + `Lunch Rating: ${schedules[i].lunchRating}\n`
+    + `Professor Rating: ${schedules[i].professorRating}\n`
+    + `Overall Rating: ${schedules[i].overallRating.toFixed(2)}\n`
+    p.appendChild(document.createTextNode(details));
+    table.appendChild(p)
+    printClasses(schedules[i], i);
+  }
 }
