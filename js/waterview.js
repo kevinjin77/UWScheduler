@@ -69,6 +69,8 @@ function submit() {
     myNode.removeChild(myNode.firstChild);
   }
 
+  document.getElementById("loading").style.display = 'block'
+
   var term = document.getElementById('term').value
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
@@ -77,8 +79,8 @@ function submit() {
     var course = [courseString.substring(0, firstDigit), courseString.substring(firstDigit)]
     courseArr.push(course)
   }
-  // var morning = document.getElementById('morning')
-  // var night = document.getElementById('night')
+  var morning = document.getElementById('morning').checked;
+  var night = document.getElementById('night').checked;
   var courses = []
   for (let i = 0; i < 5; ++i) {
     var requestString = `http://api.uwaterloo.ca/v2/terms/${term}/`
@@ -94,11 +96,20 @@ function submit() {
       if (response.data.length === 0) {
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
       }
-      courses.push(response.data)
+      let validClasses = response.data.filter(myClass =>
+        isClassValid(myClass)
+      )
+      courses.push(validClasses)
     }).then(() => {
       generateSchedules(courses)
     })
   }
+}
+
+function isClassValid(myClass) {
+  return !(!morning.checked && myClass.classes[0].date.start_time === '08:30')  &&
+  !(!night.checked && new Date(`1/1/2016 ${myClass.classes[0].date.start_time}`) >= new Date("1/1/2016 18:00")) &&
+  !(myClass.campus !== 'UW U')
 }
 
 function isScheduleValid(schedule) {
@@ -106,7 +117,11 @@ function isScheduleValid(schedule) {
     for (let j = i+1; j < schedule.length; ++j) {
       if (isConflict(schedule[i], schedule[j]) ||
       schedule[i].campus !== "UW U" || schedule[j].campus !== "UW U") {
-        return false
+        // if ((morning && (schedule[i].classes[0].start_time === "8:30" || schedule[i].classes[0].start_time === "8:30")) ||
+        // (night && (new Date(`1/1/2016 ${schedule[i].classes[0].end_time}`) >= new Date("1/1/2016 18:00") ||
+        // new Date(`1/1/2016 ${schedule[j].classes[0].end_time}`) >= new Date("1/1/2016 18:00")))) {
+          return false
+        // }
       }
     }
   }
@@ -376,24 +391,31 @@ function printClass(myClass, index) {
   let courseLocation = myClass.classes[0].location.building + ' '
   + myClass.classes[0].location.room;
   let courseProfessor = myClass.classes[0].instructors[0];
-  let courseRating = myClass.classes[0].rating.toFixed(1)
+  let courseRating = myClass.classes[0].rating;
 
   let table = document.getElementById('schedules' + index);
   let tr = document.createElement('tr');
   var name = document.createElement('th');
   name.setAttribute('scope', 'row');
+  name.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   name.appendChild(document.createTextNode(courseName));
   var section = document.createElement('td');
+  section.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   section.appendChild(document.createTextNode(courseSection));
   var enrolled = document.createElement('td');
+  enrolled.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   enrolled.appendChild(document.createTextNode(courseEnrollment));
   var time = document.createElement('td');
+  time.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   time.appendChild(document.createTextNode(courseTimes));
   var location = document.createElement('td');
+  location.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   location.appendChild(document.createTextNode(courseLocation));
   var instructor = document.createElement('td');
+  instructor.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   instructor.appendChild(document.createTextNode(courseProfessor));
   var rating = document.createElement('td');
+  rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   rating.appendChild(document.createTextNode(courseRating));
   tr.appendChild(name);
   tr.appendChild(section);
@@ -412,10 +434,12 @@ function printClasses(schedule, index) {
 }
 
 function printSchedules(schedules) {
+  document.getElementById("loading").style.display = 'none'
   for (let i = 0; i < 100; ++i) {
     let div = document.getElementById('schedules');
     let table = document.createElement('table');
-    table.setAttribute('class', 'table table-sm');
+    table.setAttribute('class', 'mdl-data-table mdl-js-data-table');
+    table.setAttribute('style', 'width: 100%');
     let thead = document.createElement('thead');
     table.appendChild(thead);
     let tr = document.createElement('tr');
@@ -424,6 +448,7 @@ function printSchedules(schedules) {
     headers.forEach(header => {
       let th = document.createElement('th');
       th.setAttribute('scope', 'row');
+      th.setAttribute('class', 'mdl-data-table__cell--non-numeric');
       th.appendChild(document.createTextNode(header));
       tr.appendChild(th);
     })
@@ -431,14 +456,26 @@ function printSchedules(schedules) {
     tbody.setAttribute('id', 'schedules' + i);
     table.appendChild(tbody);
     div.appendChild(table);
-    let p = document.createElement('p');
-    let details = 'More Details:\n'
-    + `Gap Rating: ${schedules[i].gapRating}\n`
-    + `Lunch Rating: ${schedules[i].lunchRating}\n`
-    + `Professor Rating: ${schedules[i].professorRating}\n`
-    + `Overall Rating: ${schedules[i].overallRating.toFixed(2)}\n`
-    p.appendChild(document.createTextNode(details));
-    table.appendChild(p)
+    let list = document.createElement('ul');
+    list.setAttribute('class', 'mdl-list');
+    let gap = document.createElement('li');
+    gap.setAttribute('class', 'mdl-mdl-list__item');
+    gap.appendChild(document.createTextNode(`Gap Rating: ${schedules[i].gapRating}`));
+    let lunch = document.createElement('li');
+    lunch.setAttribute('class', 'mdl-mdl-list__item');
+    lunch.appendChild(document.createTextNode(`Lunch Rating: ${schedules[i].lunchRating}`));
+    let prof = document.createElement('li');
+    prof.setAttribute('class', 'mdl-mdl-list__item');
+    prof.appendChild(document.createTextNode(`Professor Rating: ${parseFloat(schedules[i].professorRating).toFixed(1)}`));
+    let overall = document.createElement('li');
+    overall.setAttribute('class', 'mdl-mdl-list__item');
+    overall.setAttribute('style', 'font-weight: bold; color: red');
+    overall.appendChild(document.createTextNode(`Overall Rating: ${parseFloat(schedules[i].overallRating).toFixed(2)}`));
+    list.appendChild(gap);
+    list.appendChild(lunch);
+    list.appendChild(prof);
+    list.appendChild(overall);
+    table.appendChild(list)
     printClasses(schedules[i], i);
   }
 }
