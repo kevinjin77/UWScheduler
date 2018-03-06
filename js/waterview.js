@@ -376,7 +376,6 @@ function calculateRating(schedules) {
     schedule.lunchRating +
     schedule.gapRating
   })
-  console.log(schedules)
   schedules.sort((a, b) => b.overallRating - a.overallRating)
   printSchedules(schedules)
 }
@@ -398,6 +397,7 @@ function printClass(myClass, index) {
   var name = document.createElement('th');
   name.setAttribute('scope', 'row');
   name.setAttribute('class', 'mdl-data-table__cell--non-numeric');
+  name.setAttribute('style', 'color: black;')
   name.appendChild(document.createTextNode(courseName));
   var section = document.createElement('td');
   section.setAttribute('class', 'mdl-data-table__cell--non-numeric');
