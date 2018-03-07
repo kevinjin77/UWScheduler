@@ -66,7 +66,7 @@ function printClasses(schedule, index) {
 
 function printSchedules(schedules) {
   document.getElementById("loading").style.display = 'none'
-  for (let i = 0; i < 100; ++i) {
+  for (let i = 0; i < Math.min(schedules.length, 100); ++i) {
     let div = document.getElementById('schedules');
     let table = document.createElement('table');
     table.setAttribute('class', 'mdl-data-table mdl-js-data-table');

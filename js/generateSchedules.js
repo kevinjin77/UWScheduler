@@ -59,9 +59,6 @@ function isConflict(course1, course2) {
   return false
 }
 
-const f = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
-const cartesian = (a, b, ...c) => (b ? cartesian(f(a, b), ...c) : a);
-
 function submit() {
   done = false;
   var myNode = document.getElementById("schedules");
@@ -72,7 +69,7 @@ function submit() {
   document.getElementById("loading").style.display = 'block'
   var term = document.getElementById('termNumber').value;
   var courseArr = [];
-  for (let i = 1; i <= 5; ++i) {
+  for (let i = 1; i <= numCourses; ++i) {
     var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
     var firstDigit = courseString.search(/\d/)
     var course = [courseString.substring(0, firstDigit), courseString.substring(firstDigit)]
@@ -81,7 +78,7 @@ function submit() {
   var morning = document.getElementById('morning').checked;
   var night = document.getElementById('night').checked;
   var courses = []
-  for (let i = 0; i < 5; ++i) {
+  for (let i = 0; i < numCourses; ++i) {
     var error = false;
     var requestString = `http://api.uwaterloo.ca/v2/terms/${term}/`
     requestString += `${courseArr[i][0]}/${courseArr[i][1]}/schedule.json?key=${uwApiKey}`
@@ -133,9 +130,25 @@ function isScheduleValid(schedule) {
   return true
 }
 
+function cartesianProduct(arr) {
+    return arr.reduce(function(a,b){
+        return a.map(function(x){
+            return b.map(function(y){
+                return x.concat(y);
+            })
+        }).reduce(function(a,b){ return a.concat(b) },[])
+    }, [[]])
+}
+
 function generateSchedules(courses) {
-  if (courses.length < 5) return
-  let schedules = cartesian(courses[0], courses[1], courses[2], courses[3], courses[4])
+  if (courses.length < numCourses) return
+  let courseArr = [];
+  for (let i = 0; i < numCourses; ++i) {
+    courseArr.push(courses[i]);
+  }
+  let schedules = cartesianProduct(courseArr).filter(schedule =>
+    isScheduleValid(schedule)
+  )
   getTimes(schedules)
   calculateProfessorRating(schedules)
 }
