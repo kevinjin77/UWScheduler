@@ -86,11 +86,16 @@ function submit() {
       "async": true,
       "crossDomain": true,
       "url": requestString,
-      "method": "GET"
+      "method": "GET",
+      "error": function () {
+        alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
+        error = true
+        document.getElementById("loading").style.display = 'none'
+      }
     }
 
     $.ajax(settings).then(function (response) {
-      if (response.data.length === 0) {
+      if (response.meta.status !== 200) {
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
         error = true
       }
@@ -119,11 +124,7 @@ function isScheduleValid(schedule) {
     for (let j = i+1; j < schedule.length; ++j) {
       if (isConflict(schedule[i], schedule[j]) ||
       schedule[i].campus !== "UW U" || schedule[j].campus !== "UW U") {
-        // if ((morning && (schedule[i].classes[0].start_time === "8:30" || schedule[i].classes[0].start_time === "8:30")) ||
-        // (night && (new Date(`1/1/2016 ${schedule[i].classes[0].end_time}`) >= new Date("1/1/2016 18:00") ||
-        // new Date(`1/1/2016 ${schedule[j].classes[0].end_time}`) >= new Date("1/1/2016 18:00")))) {
-          return false
-        // }
+        return false
       }
     }
   }
@@ -286,7 +287,10 @@ function calculateProfessorRating(schedules) {
       "async": true,
       "crossDomain": true,
       "url": `http://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${fName}+${lName}`,
-      "method": "GET"
+      "method": "GET",
+      "error": function () {
+        alert("Oops! Something went wrong. Please try again later.")
+      }
     }
 
     $.ajax(settings).then(function (response) {
@@ -368,9 +372,9 @@ function calculateLunchRating(schedules) {
 
 function calculateRating(schedules) {
   schedules.forEach(schedule => {
-    schedule.overallRating = schedule.professorRating * 20 +
-    schedule.lunchRating +
-    schedule.gapRating * 0.5
+    schedule.overallRating = schedule.professorRating * 20 * (professorSlider.value / 5) +
+    schedule.lunchRating * (lunchSlider.value / 5) +
+    schedule.gapRating * 0.5 * (gapSlider.value / 5)
   })
   schedules.sort((a, b) => b.overallRating - a.overallRating)
   printSchedules(schedules)

@@ -23,10 +23,11 @@
     				<h2 class="mdl-card__title-text">WaterView</h2>
     			</div>
           <div>
-            <div style="width: 50%; float:left;">
-              <div style="width: 50%;" class="mdl-card__supporting-text">
+            <div style="width: 50%; height: auto; float:left;">
+              <div style="display: block; overflow: visible;" class="mdl-card__supporting-text">
+                <h3>Course Information</h3>
         				<form id="form" action="#">
-                  <div class="mdl-textfield mdl-js-textfield getmdl-select">
+                  <div style="display: block" class="mdl-textfield mdl-js-textfield getmdl-select">
                     <input type="text" value="" class="mdl-textfield__input" readonly>
                     <input id="termNumber" type="hidden" value="" name="term">
                     <label for="term" class="mdl-textfield__label">Term</label>
@@ -36,7 +37,7 @@
                       <li id="term2" class="mdl-menu__item"></li>
                     </ul>
                   </div>
-                  <div class="mdl-textfield mdl-js-textfield getmdl-select">
+                  <div style="display: block; overflow: visible;" class="mdl-textfield mdl-js-textfield getmdl-select">
                     <input type="text" value="" class="mdl-textfield__input" id="numCourses" readonly>
                     <input id="numCourses2" type="hidden" value="" name="numCourses">
                     <label for="numCourses" class="mdl-textfield__label">How many courses are you taking?</label>
@@ -49,35 +50,27 @@
                       <li class="mdl-menu__item" data-val="7">7</li>
                     </ul>
                   </div>
-        					<!-- <div class="mdl-textfield mdl-js-textfield">
-        						<input class="mdl-textfield__input" type="text" id="course1" value="MATH239"/>
-        						<label class="mdl-textfield__label">Course 1</label>
-        					</div>
-                  <div class="mdl-textfield mdl-js-textfield">
-        						<input class="mdl-textfield__input" type="text" id="course2" value="STAT230"/>
-        						<label class="mdl-textfield__label">Course 2</label>
-        					</div>
-                  <div class="mdl-textfield mdl-js-textfield">
-        						<input class="mdl-textfield__input" type="text" id="course3" value="ECON102"/>
-        						<label class="mdl-textfield__label">Course 3</label>
-        					</div>
-                  <div class="mdl-textfield mdl-js-textfield">
-        						<input class="mdl-textfield__input" type="text" id="course4" value="CS245"/>
-        						<label class="mdl-textfield__label">Course 4</label>
-        					</div>
-                  <div class="mdl-textfield mdl-js-textfield">
-        						<input class="mdl-textfield__input" type="text" id="course5"/>
-        						<label class="mdl-textfield__label">Course 5</label>
-        					</div> -->
         				</form>
-                <button class="mdl-button mdl-js-button mdl-button--icon">
-                  <i class="material-icons">mood</i>
-                </button>
         			</div>
             </div>
             <div style="width: 50%; float:right;">
-              <div style="width: 50%;" class="mdl-card__supporting-text">
-                <input class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+              <div class="mdl-card__supporting-text">
+                <h3>Preferences</h3>
+                <div style="padding-bottom: 30px; text-align: center;">
+                  <p>Gap (I want as few 70 minute gaps between classes as possible.)</p>
+                  <input id="gapSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                  <p id="gapWeight">5</p>
+                </div>
+                <div style="padding-bottom: 30px; text-align: center;">
+                  <p>Lunch (I want to have as much time as possible for lunch.)</p>
+                  <input id="lunchSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                  <p id="lunchWeight">5</p>
+                </div>
+                <div style="padding-bottom: 30px; text-align: center;">
+                  <p>Professor (I want the best professors.)</p>
+                  <input id="professorSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                  <p id="professorWeight">5</p>
+                </div>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
                   <input type="checkbox" id="morning" class="mdl-checkbox__input" />
                   <span class="mdl-checkbox__label">8:30?</span> <!-- Checkbox Label -->
@@ -89,14 +82,17 @@
         			</div>
             </div>
           </div>
-    			<div class="mdl-card__actions mdl-card--border">
-    				<button onclick="submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+    			<div style="text-align: center;" class="mdl-card__actions mdl-card--border">
+    				<button
+            style="display: inline-block;"
+            onclick="submit()"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
               Generate Schedules
             </button>
     			</div>
           <div id="loading" style='margin-left: auto; margin-right: auto; display:none;'>
             <div id='spinner' class="mdl-spinner mdl-js-spinner is-active"></div>
-            <div style='margin-left: auto; margin-right: auto; text-align: center;'>Loading...</div>
+            <p style='margin-left: auto; margin-right: auto; text-align: center;'>Loading...</p>
           </div>
           <div id='schedules'></div>
     		</div>

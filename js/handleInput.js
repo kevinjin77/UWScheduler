@@ -48,6 +48,7 @@ input.onchange = function () {
   for (let i = 1; i <= numCourses; ++i) {
     let div = document.createElement('div');
     div.id = `course${i}Input`
+    div.setAttribute('style', 'display: block;');
     div.setAttribute('class', 'mdl-textfield mdl-js-textfield');
     componentHandler.upgradeElement(div);
     let input = document.createElement('input');
@@ -72,3 +73,18 @@ input.onchange = function () {
     form.appendChild(div);
   }
 };
+
+var gapSlider = document.getElementById('gapSlider');
+gapSlider.onchange = function () {
+  document.getElementById('gapWeight').innerHTML = gapSlider.value;
+}
+
+var lunchSlider = document.getElementById('lunchSlider');
+lunchSlider.onchange = function () {
+  document.getElementById('lunchWeight').innerHTML = lunchSlider.value;
+}
+
+var professorSlider = document.getElementById('professorSlider');
+professorSlider.onchange = function () {
+  document.getElementById('professorWeight').innerHTML = professorSlider.value;
+}
