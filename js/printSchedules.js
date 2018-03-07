@@ -108,5 +108,18 @@ function printSchedules(schedules) {
     list.appendChild(overall);
     printClasses(schedules[i], i);
     div.appendChild(list);
+    let buttonDiv = document.createElement('div');
+    buttonDiv.setAttribute('style', 'display:inline-block; vertical-align:top;');
+    let exportBtn = document.createElement('button');
+    exportBtn.className = 'mdl-button mdl-js-button mdl-button--icon'
+    exportBtn.onclick = () => {
+      copyTextToClipboard(JSON.stringify(schedules[i]));
+    }
+    let icon = document.createElement('i');
+    icon.className = 'material-icons';
+    icon.innerHTML = 'assignment';
+    exportBtn.appendChild(icon);
+    buttonDiv.appendChild(exportBtn);
+    div.appendChild(buttonDiv);
   }
 }
