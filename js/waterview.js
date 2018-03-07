@@ -69,6 +69,7 @@ function submit() {
     myNode.removeChild(myNode.firstChild);
   }
 
+  document.getElementById("loading").style.display = 'block'
   var term = document.getElementById('term').value
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
@@ -102,8 +103,9 @@ function submit() {
       courses.push(validClasses)
     }).then(() => {
       if (!error) {
-        document.getElementById("loading").style.display = 'block'
         generateSchedules(courses)
+      } else {
+        document.getElementById("loading").style.display = 'none'
       }
     })
   }
@@ -417,7 +419,20 @@ function printClass(myClass, index) {
   instructor.appendChild(document.createTextNode(courseProfessor));
   var rating = document.createElement('td');
   rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  rating.appendChild(document.createTextNode(courseRating));
+  if (courseRating === 'Not Found') {
+    let commaIndex = courseProfessor.indexOf(',')
+    let spaceIndex = courseProfessor.indexOf(' ')
+    let lName = courseProfessor.substring(0, commaIndex)
+    let fName = spaceIndex === -1 ? courseProfessor.substring(commaIndex + 1) :
+    courseProfessor.substring(commaIndex + 1, spaceIndex)
+    let rmp = document.createElement('a');
+    rmp.appendChild(document.createTextNode(courseRating));
+    rmp.setAttribute('href', `http://www.ratemyprofessors.com/search.jsp?query=${fName}+${lName}`);
+    rmp.setAttribute('target', '_blank');
+    rating.appendChild(rmp);
+  } else {
+    rating.appendChild(document.createTextNode(courseRating));
+  }
   tr.appendChild(name);
   tr.appendChild(section);
   tr.appendChild(enrolled);
