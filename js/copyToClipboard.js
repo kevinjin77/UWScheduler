@@ -80,22 +80,6 @@ var footer =
 `Printer Friendly Page
 Go to top iconGo to top`
 
-var mclass = `CS 246 - Object-Oriented Software Development
-Status	Units	Grading	Deadlines
-Enrolled
-0.5
-Extra to Degree
-Academic Calendar Deadlines
-Class Nbr	Section	Component	Days & Times	Room	Instructor	Start/End Date
-5709
-001
-LEC
-TTh 10:00AM - 11:20AM
-PHY   313
-Bradley Lushman
-01/03/2018 - 04/04/2018
-`
-
 function convertDate(date) {
   let hour = parseInt(date.substr(0, date.indexOf(':')));
   let minute = date.substr(date.indexOf(':') + 1);
