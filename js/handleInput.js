@@ -32,11 +32,6 @@ for (let i = 0; i < 3; ++i) {
   item.innerHTML = `${terms[i]}`
 }
 
-{/* <div class="mdl-textfield mdl-js-textfield">
-  <input class="mdl-textfield__input" type="text" id="course3" value="ECON102"/>
-  <label class="mdl-textfield__label">Course 3</label>
-</div> */}
-
 var numCourses;
 var input = document.getElementById('numCourses');
 input.onchange = function () {
