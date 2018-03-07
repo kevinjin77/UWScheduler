@@ -80,7 +80,7 @@ function submit() {
   var courses = []
   for (let i = 0; i < numCourses; ++i) {
     var error = false;
-    var requestString = `http://api.uwaterloo.ca/v2/terms/${term}/`
+    var requestString = `https://api.uwaterloo.ca/v2/terms/${term}/`
     requestString += `${courseArr[i][0]}/${courseArr[i][1]}/schedule.json?key=${uwApiKey}`
     var settings = {
       "async": true,
@@ -286,7 +286,7 @@ function calculateProfessorRating(schedules) {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": `http://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${fName}+${lName}`,
+      "url": `https://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${fName}+${lName}`,
       "method": "GET",
       "error": function () {
         alert("Oops! Something went wrong. Please try again later.")
