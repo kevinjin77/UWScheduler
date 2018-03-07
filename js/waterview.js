@@ -69,12 +69,10 @@ function submit() {
     myNode.removeChild(myNode.firstChild);
   }
 
-  document.getElementById("loading").style.display = 'block'
-
   var term = document.getElementById('term').value
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
-    var courseString = document.getElementById(`course${i}`).value.toUpperCase()
+    var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
     var firstDigit = courseString.search(/\d/)
     var course = [courseString.substring(0, firstDigit), courseString.substring(firstDigit)]
     courseArr.push(course)
@@ -83,6 +81,7 @@ function submit() {
   var night = document.getElementById('night').checked;
   var courses = []
   for (let i = 0; i < 5; ++i) {
+    var error = false;
     var requestString = `http://api.uwaterloo.ca/v2/terms/${term}/`
     requestString += `${courseArr[i][0]}/${courseArr[i][1]}/schedule.json?key=${uwApiKey}`
     var settings = {
@@ -95,13 +94,17 @@ function submit() {
     $.ajax(settings).then(function (response) {
       if (response.data.length === 0) {
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
+        error = true
       }
       let validClasses = response.data.filter(myClass =>
         isClassValid(myClass)
       )
       courses.push(validClasses)
     }).then(() => {
-      generateSchedules(courses)
+      if (!error) {
+        document.getElementById("loading").style.display = 'block'
+        generateSchedules(courses)
+      }
     })
   }
 }
@@ -109,7 +112,7 @@ function submit() {
 function isClassValid(myClass) {
   return !(!morning.checked && myClass.classes[0].date.start_time === '08:30')  &&
   !(!night.checked && new Date(`1/1/2016 ${myClass.classes[0].date.start_time}`) >= new Date("1/1/2016 18:00")) &&
-  !(myClass.campus !== 'UW U')
+  !(myClass.campus !== 'UW U') && (myClass.section.includes("LEC"))
 }
 
 function isScheduleValid(schedule) {
@@ -130,9 +133,7 @@ function isScheduleValid(schedule) {
 
 function generateSchedules(courses) {
   if (courses.length < 5) return
-  let schedules = cartesian(courses[0], courses[1], courses[2], courses[3], courses[4]).filter(schedule =>
-    isScheduleValid(schedule)
-  )
+  let schedules = cartesian(courses[0], courses[1], courses[2], courses[3], courses[4])
   getTimes(schedules)
   calculateProfessorRating(schedules)
 }
@@ -394,7 +395,7 @@ function printClass(myClass, index) {
 
   let table = document.getElementById('schedules' + index);
   let tr = document.createElement('tr');
-  var name = document.createElement('th');
+  var name = document.createElement('td');
   name.setAttribute('scope', 'row');
   name.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   name.setAttribute('style', 'color: black;')
@@ -475,7 +476,7 @@ function printSchedules(schedules) {
     list.appendChild(lunch);
     list.appendChild(prof);
     list.appendChild(overall);
-    table.appendChild(list)
     printClasses(schedules[i], i);
+    div.appendChild(list);
   }
 }
