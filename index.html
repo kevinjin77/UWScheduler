@@ -27,7 +27,7 @@
               <div style="display: block; overflow: visible;" class="mdl-card__supporting-text">
                 <h3>Course Information</h3>
         				<form id="form" action="#">
-                  <div style="display: block" class="mdl-textfield mdl-js-textfield getmdl-select">
+                  <div style="display: block" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
                     <input type="text" value="" class="mdl-textfield__input" readonly>
                     <input id="termNumber" type="hidden" value="" name="term">
                     <label for="term" class="mdl-textfield__label">Term</label>
@@ -37,7 +37,8 @@
                       <li id="term2" class="mdl-menu__item"></li>
                     </ul>
                   </div>
-                  <div style="display: block; overflow: visible;" class="mdl-textfield mdl-js-textfield getmdl-select">
+                  <div style="display: block; overflow: visible;"
+                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
                     <input type="text" value="" class="mdl-textfield__input" id="numCourses" readonly>
                     <input id="numCourses2" type="hidden" value="" name="numCourses">
                     <label for="numCourses" class="mdl-textfield__label">How many courses are you taking?</label>
@@ -73,11 +74,11 @@
                 </div>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
                   <input type="checkbox" id="morning" class="mdl-checkbox__input" />
-                  <span class="mdl-checkbox__label">8:30?</span> <!-- Checkbox Label -->
+                  <span class="mdl-checkbox__label">Allow 8:30AM Classes?</span> <!-- Checkbox Label -->
                 </label>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="night">
                   <input type="checkbox" id="night" class="mdl-checkbox__input" />
-                  <span class="mdl-checkbox__label">Night?</span> <!-- Checkbox Label -->
+                  <span class="mdl-checkbox__label">Allow Night Classes? (After 6:00PM)</span> <!-- Checkbox Label -->
                 </label>
         			</div>
             </div>

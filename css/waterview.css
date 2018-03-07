@@ -8,3 +8,9 @@
 .mdl-textfield .mdl-js-textfield {
   display: block;
 }
+
+.mdl-textfield__error {
+	width: 100%;
+	left: 0;
+ text-align: left;
+}
