@@ -150,6 +150,7 @@ function generateSchedules(courses) {
   let schedules = cartesianProduct(courseArr).filter(schedule =>
     isScheduleValid(schedule)
   )
+  console.log(flowConvertSchedule(schedules[0]))
   getTimes(schedules)
   calculateProfessorRating(schedules)
 }

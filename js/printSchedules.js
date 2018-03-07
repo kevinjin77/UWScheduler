@@ -113,7 +113,7 @@ function printSchedules(schedules) {
     let exportBtn = document.createElement('button');
     exportBtn.className = 'mdl-button mdl-js-button mdl-button--icon'
     exportBtn.onclick = () => {
-      copyTextToClipboard(JSON.stringify(schedules[i]));
+      copyTextToClipboard(flowConvertSchedule(schedules[i]));
     }
     let icon = document.createElement('i');
     icon.className = 'material-icons';

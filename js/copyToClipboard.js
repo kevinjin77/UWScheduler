@@ -47,17 +47,93 @@ function copyTextToClipboard(text) {
   try {
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Copying text command was ' + msg);
+    // console.log('Copying text command was ' + msg);
   } catch (err) {
-    console.log('Oops, unable to copy');
+    // console.log('Oops, unable to copy');
   }
 
   document.body.removeChild(textArea);
 }
 
-// var copyBobBtn = document.querySelector('.js-copy-bob-btn'),
-//   copyJaneBtn = document.querySelector('.js-copy-jane-btn');
-//
-// copyBobBtn.addEventListener('click', function(event) {
-//   copyTextToClipboard('Bob');
-// });
+var header =
+`GO!
+John Smith
+My Academics
+Course Selection (Undergrad only)
+Search for Classes
+Enroll
+ 	My Class Schedule	 	 	|	 	 	Shopping Cart	 	 	|	 	 	Add	 	 	|	 	 	Drop	 	 	|	 	 	Swap	 	 	|	 	 	Edit	 	 	|	 	 	Term Information	 	 	|	 	 	Exam Information
+My Class Schedule
+List View
+Weekly Calendar View
+Select Display Option
+L
+Winter 2018 | Undergraduate | University of Waterloo
+Group Box
+Collapse section Class Schedule Filter Options Class Schedule Filter Options
+Show Enrolled Classes
+Show Dropped Classes
+Show Waitlisted
+`;
+
+var footer =
+`Printer Friendly Page
+Go to top iconGo to top`
+
+var mclass = `CS 246 - Object-Oriented Software Development
+Status	Units	Grading	Deadlines
+Enrolled
+0.5
+Extra to Degree
+Academic Calendar Deadlines
+Class Nbr	Section	Component	Days & Times	Room	Instructor	Start/End Date
+5709
+001
+LEC
+TTh 10:00AM - 11:20AM
+PHY   313
+Bradley Lushman
+01/03/2018 - 04/04/2018
+`
+
+function convertDate(date) {
+  let hour = parseInt(date.substr(0, date.indexOf(':')));
+  let minute = date.substr(date.indexOf(':') + 1);
+  if (hour >= 12) {
+    return `${(hour === 12) ? 12 : hour - 12}:${minute}PM`
+  } else {
+    return `${hour}:${minute}AM`
+  }
+}
+
+function flowConvertCourse(course) {
+  let courseProfessor = course.classes[0].instructors[0];
+  let commaIndex = courseProfessor.indexOf(',');
+  let spaceIndex = courseProfessor.indexOf(' ');
+  let lName = courseProfessor.substring(0, commaIndex);
+  let fName = spaceIndex === -1 ? courseProfessor.substring(commaIndex + 1) :
+  courseProfessor.substring(commaIndex + 1, spaceIndex);
+  return `${course.subject} ${course.catalog_number} - ${course.title}
+Status	Units	Grading	Deadlines
+Enrolled
+0.5
+Extra to Degree
+Academic Calendar Deadlines
+Class Nbr	Section	Component	Days & Times	Room	Instructor	Start/End Date
+${course.class_number}
+${course.section.substr(course.section.indexOf(' ') + 1)}
+LEC
+${course.classes[0].date.weekdays} ${convertDate(course.classes[0].date.start_time)} - ${convertDate(course.classes[0].date.end_time)}
+${course.classes[0].location.building} ${course.classes[0].location.room}
+${fName} ${lName}
+01/03/2018 - 04/04/2018
+`;
+}
+
+function flowConvertSchedule(schedule) {
+  let courses = '';
+  for (let i = 0; i < schedule.length; ++i) {
+    courses += flowConvertCourse(schedule[i]);
+  }
+  return header + courses + footer;
+}
