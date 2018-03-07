@@ -5,81 +5,105 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <link rel="stylesheet" href="./css/waterview.css">
+    <link rel="stylesheet" href="node_modules/getmdl-select/getmdl-select.min.css">
+    <script defer src="node_modules/getmdl-select/getmdl-select.min.js"></script>
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- Latest compiled JavaScript -->
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <script src="./js/waterview.js"></script>
   </head>
 
   <body>
     <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
-	<main class="mdl-layout__content">
-		<div style="width: 100%;" class="mdl-card mdl-shadow--6dp">
-			<div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-				<h2 class="mdl-card__title-text">WaterView</h2>
-			</div>
-      <div>
-        <div style="width: 50%; float:left;">
-          <div style="width: 50%;" class="mdl-card__supporting-text">
-    				<form action="#">
-    					<div style="display: block" class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="term" value="1179"/>
-    						<label class="mdl-textfield__label" for="term">Term</label>
-    					</div>
-    					<div style="display: block" class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="course1" value="MATH239"/>
-    						<label class="mdl-textfield__label" for="course1">Course 1</label>
-    					</div>
-              <div  style="display: block"class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="course2" value="STAT230"/>
-    						<label class="mdl-textfield__label" for="course2">Course 2</label>
-    					</div>
-              <div style="display: block" class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="course3" value="ECON102"/>
-    						<label class="mdl-textfield__label" for="course3">Course 3</label>
-    					</div>
-              <div style="display: block" class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="course4" value="CS245"/>
-    						<label class="mdl-textfield__label" for="course4">Course 4</label>
-    					</div>
-              <div style="display: block" class="mdl-textfield mdl-js-textfield">
-    						<input class="mdl-textfield__input" type="text" id="course5" value="CS246"/>
-    						<label class="mdl-textfield__label" for="course5">Course 5</label>
-    					</div>
-              <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
-                <input type="checkbox" id="morning" class="mdl-checkbox__input" />
-                <span class="mdl-checkbox__label">8:30?</span> <!-- Checkbox Label -->
-              </label>
-              <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="night">
-                <input type="checkbox" id="night" class="mdl-checkbox__input" />
-                <span class="mdl-checkbox__label">Night?</span> <!-- Checkbox Label -->
-              </label>
-    				</form>
+    	<main class="mdl-layout__content">
+    		<div style="width: 100%;" class="mdl-card mdl-shadow--6dp">
+    			<div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+    				<h2 class="mdl-card__title-text">WaterView</h2>
     			</div>
-        </div>
-        <div style="width: 50%; float:right;">
-          <div style="width: 50%;" class="mdl-card__supporting-text">
-            <input class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+          <div>
+            <div style="width: 50%; float:left;">
+              <div style="width: 50%;" class="mdl-card__supporting-text">
+        				<form id="form" action="#">
+                  <div class="mdl-textfield mdl-js-textfield getmdl-select">
+                    <input type="text" value="" class="mdl-textfield__input" readonly>
+                    <input id="termNumber" type="hidden" value="" name="term">
+                    <label for="term" class="mdl-textfield__label">Term</label>
+                    <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                      <li id="term0" class="mdl-menu__item"></li>
+                      <li id="term1" class="mdl-menu__item"></li>
+                      <li id="term2" class="mdl-menu__item"></li>
+                    </ul>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield getmdl-select">
+                    <input type="text" value="" class="mdl-textfield__input" id="numCourses" readonly>
+                    <input id="numCourses2" type="hidden" value="" name="numCourses">
+                    <label for="numCourses" class="mdl-textfield__label">How many courses are you taking?</label>
+                    <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                      <li class="mdl-menu__item" data-val="2">2</li>
+                      <li class="mdl-menu__item" data-val="3">3</li>
+                      <li class="mdl-menu__item" data-val="4">4</li>
+                      <li class="mdl-menu__item" data-val="5">5</li>
+                      <li class="mdl-menu__item" data-val="6">6</li>
+                      <li class="mdl-menu__item" data-val="7">7</li>
+                    </ul>
+                  </div>
+        					<!-- <div class="mdl-textfield mdl-js-textfield">
+        						<input class="mdl-textfield__input" type="text" id="course1" value="MATH239"/>
+        						<label class="mdl-textfield__label">Course 1</label>
+        					</div>
+                  <div class="mdl-textfield mdl-js-textfield">
+        						<input class="mdl-textfield__input" type="text" id="course2" value="STAT230"/>
+        						<label class="mdl-textfield__label">Course 2</label>
+        					</div>
+                  <div class="mdl-textfield mdl-js-textfield">
+        						<input class="mdl-textfield__input" type="text" id="course3" value="ECON102"/>
+        						<label class="mdl-textfield__label">Course 3</label>
+        					</div>
+                  <div class="mdl-textfield mdl-js-textfield">
+        						<input class="mdl-textfield__input" type="text" id="course4" value="CS245"/>
+        						<label class="mdl-textfield__label">Course 4</label>
+        					</div>
+                  <div class="mdl-textfield mdl-js-textfield">
+        						<input class="mdl-textfield__input" type="text" id="course5"/>
+        						<label class="mdl-textfield__label">Course 5</label>
+        					</div> -->
+        				</form>
+                <button class="mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">mood</i>
+                </button>
+        			</div>
+            </div>
+            <div style="width: 50%; float:right;">
+              <div style="width: 50%;" class="mdl-card__supporting-text">
+                <input class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
+                  <input type="checkbox" id="morning" class="mdl-checkbox__input" />
+                  <span class="mdl-checkbox__label">8:30?</span> <!-- Checkbox Label -->
+                </label>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="night">
+                  <input type="checkbox" id="night" class="mdl-checkbox__input" />
+                  <span class="mdl-checkbox__label">Night?</span> <!-- Checkbox Label -->
+                </label>
+        			</div>
+            </div>
+          </div>
+    			<div class="mdl-card__actions mdl-card--border">
+    				<button onclick="submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+              Generate Schedules
+            </button>
     			</div>
-        </div>
-      </div>
-			<div class="mdl-card__actions mdl-card--border">
-				<button onclick="submit()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-          Generate Schedules
-        </button>
-			</div>
-      <div id="loading" style='margin-left: auto; margin-right: auto; display:none;'>
-        <div id='spinner' class="mdl-spinner mdl-js-spinner is-active"></div>
-        <div style='margin-left: auto; margin-right: auto; text-align: center;'>Loading...</div>
-      </div>
-      <div id='schedules'></div>
-		</div>
-	</main>
-</div>
-
-
+          <div id="loading" style='margin-left: auto; margin-right: auto; display:none;'>
+            <div id='spinner' class="mdl-spinner mdl-js-spinner is-active"></div>
+            <div style='margin-left: auto; margin-right: auto; text-align: center;'>Loading...</div>
+          </div>
+          <div id='schedules'></div>
+    		</div>
+    	</main>
+    </div>
+    <script src="./js/handleInput.js"></script>
+    <script src="./js/generateSchedules.js"></script>
+    <script src="./js/printSchedules.js"></script>
   </body>
 </html>

@@ -70,7 +70,7 @@ function submit() {
   }
 
   document.getElementById("loading").style.display = 'block'
-  var term = document.getElementById('term').value
+  var term = document.getElementById('termNumber').value;
   var courseArr = [];
   for (let i = 1; i <= 5; ++i) {
     var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
@@ -277,29 +277,9 @@ function calculateProfessorRating(schedules) {
     }
 
     $.ajax(settings).then(function (response) {
-      // if (response.professors.length === 0) {
-      //   var settings = {
-      //     "async": true,
-      // 	  "crossDomain": true,
-      // 	  "url": `http://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${lName}`,
-      // 	  "method": "GET"
-      // 	}
-      //
-      //   $.ajax(settings).then(function (response) {
-      //     let rating = -1
-      //     for (let i = 0; i < response.professors.length === 0; ++i) {
-      //       if (response.professors[i].tFname.startsWith(fName[0])) {
-      //         rating = parseFloat(response.professors[i].overall_rating)
-      //       }
-      //     }
-      //     schedule[i].classes[0].rating = (rating === -1) ? "none" : rating
-      //     totalRating += (rating === -1) ? 2 : rating
-      //   })
-      // } else {
       noRes = (response.professors.length === 0)
       let rating = noRes ? -1 : parseFloat(response.professors[0].overall_rating)
       profsRatings.push([profs[i], rating])
-      // }
     }).then(() => {
       if (profsRatings.length === profs.length && !done) {
         done = true;
@@ -377,121 +357,8 @@ function calculateRating(schedules) {
   schedules.forEach(schedule => {
     schedule.overallRating = schedule.professorRating * 20 +
     schedule.lunchRating +
-    schedule.gapRating
+    schedule.gapRating * 0.5
   })
   schedules.sort((a, b) => b.overallRating - a.overallRating)
   printSchedules(schedules)
-}
-
-function printClass(myClass, index) {
-  let courseName = myClass.subject + ' ' + myClass.catalog_number;
-  let courseTitle = myClass.title;
-  let courseSection = myClass.section;
-  let courseEnrollment = myClass.enrollment_total + '/' + myClass.enrollment_capacity;
-  let courseTimes =  myClass.classes[0].date.start_time + ' - ' + myClass.classes[0].date.end_time
-  + ' ' + myClass.classes[0].date.weekdays;
-  let courseLocation = myClass.classes[0].location.building + ' '
-  + myClass.classes[0].location.room;
-  let courseProfessor = myClass.classes[0].instructors[0];
-  let courseRating = myClass.classes[0].rating;
-
-  let table = document.getElementById('schedules' + index);
-  let tr = document.createElement('tr');
-  var name = document.createElement('td');
-  name.setAttribute('scope', 'row');
-  name.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  name.setAttribute('style', 'color: black;')
-  name.appendChild(document.createTextNode(courseName));
-  var section = document.createElement('td');
-  section.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  section.appendChild(document.createTextNode(courseSection));
-  var enrolled = document.createElement('td');
-  enrolled.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  enrolled.appendChild(document.createTextNode(courseEnrollment));
-  var time = document.createElement('td');
-  time.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  time.appendChild(document.createTextNode(courseTimes));
-  var location = document.createElement('td');
-  location.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  location.appendChild(document.createTextNode(courseLocation));
-  var instructor = document.createElement('td');
-  instructor.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  instructor.appendChild(document.createTextNode(courseProfessor));
-  var rating = document.createElement('td');
-  rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  if (courseRating === 'Not Found') {
-    let commaIndex = courseProfessor.indexOf(',')
-    let spaceIndex = courseProfessor.indexOf(' ')
-    let lName = courseProfessor.substring(0, commaIndex)
-    let fName = spaceIndex === -1 ? courseProfessor.substring(commaIndex + 1) :
-    courseProfessor.substring(commaIndex + 1, spaceIndex)
-    let rmp = document.createElement('a');
-    rmp.appendChild(document.createTextNode(courseRating));
-    rmp.setAttribute('href', `http://www.ratemyprofessors.com/search.jsp?query=${fName}+${lName}`);
-    rmp.setAttribute('target', '_blank');
-    rating.appendChild(rmp);
-  } else {
-    rating.appendChild(document.createTextNode(courseRating));
-  }
-  tr.appendChild(name);
-  tr.appendChild(section);
-  tr.appendChild(enrolled);
-  tr.appendChild(time);
-  tr.appendChild(location);
-  tr.appendChild(instructor);
-  tr.appendChild(rating);
-  table.appendChild(tr);
-}
-
-function printClasses(schedule, index) {
-  schedule.forEach(myClass => {
-    printClass(myClass, index);
-  })
-}
-
-function printSchedules(schedules) {
-  document.getElementById("loading").style.display = 'none'
-  for (let i = 0; i < 100; ++i) {
-    let div = document.getElementById('schedules');
-    let table = document.createElement('table');
-    table.setAttribute('class', 'mdl-data-table mdl-js-data-table');
-    table.setAttribute('style', 'width: 100%');
-    let thead = document.createElement('thead');
-    table.appendChild(thead);
-    let tr = document.createElement('tr');
-    thead.appendChild(tr);
-    let headers = ['Course', 'Section', 'Enrolled', 'Time', 'Location', 'Instructor', 'Instructor Rating'];
-    headers.forEach(header => {
-      let th = document.createElement('th');
-      th.setAttribute('scope', 'row');
-      th.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-      th.appendChild(document.createTextNode(header));
-      tr.appendChild(th);
-    })
-    let tbody = document.createElement('tbody');
-    tbody.setAttribute('id', 'schedules' + i);
-    table.appendChild(tbody);
-    div.appendChild(table);
-    let list = document.createElement('ul');
-    list.setAttribute('class', 'mdl-list');
-    let gap = document.createElement('li');
-    gap.setAttribute('class', 'mdl-mdl-list__item');
-    gap.appendChild(document.createTextNode(`Gap Rating: ${schedules[i].gapRating}`));
-    let lunch = document.createElement('li');
-    lunch.setAttribute('class', 'mdl-mdl-list__item');
-    lunch.appendChild(document.createTextNode(`Lunch Rating: ${schedules[i].lunchRating}`));
-    let prof = document.createElement('li');
-    prof.setAttribute('class', 'mdl-mdl-list__item');
-    prof.appendChild(document.createTextNode(`Professor Rating: ${parseFloat(schedules[i].professorRating).toFixed(1)}`));
-    let overall = document.createElement('li');
-    overall.setAttribute('class', 'mdl-mdl-list__item');
-    overall.setAttribute('style', 'font-weight: bold; color: red');
-    overall.appendChild(document.createTextNode(`Overall Rating: ${parseFloat(schedules[i].overallRating).toFixed(2)}`));
-    list.appendChild(gap);
-    list.appendChild(lunch);
-    list.appendChild(prof);
-    list.appendChild(overall);
-    printClasses(schedules[i], i);
-    div.appendChild(list);
-  }
 }
