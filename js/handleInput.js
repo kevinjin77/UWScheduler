@@ -45,6 +45,7 @@ $('#import').click(() => {
   if (inputMode !== 'import') {
     document.getElementById('form').style.display = 'none';
     document.getElementById('importForm').style.display = 'block';
+    document.getElementById('questBox').classList.remove("is-dirty");
     inputMode = 'import';
   }
 })

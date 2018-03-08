@@ -1,3 +1,7 @@
+.mdl-card__supporting-text {
+  color: black;
+}
+
 #spinner {
   width: 150px;
   height: 150px;
