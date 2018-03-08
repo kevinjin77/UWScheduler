@@ -2,6 +2,11 @@
   color: black;
 }
 
+.mdl-data-table th {
+  color: black;
+  font-size: 14px;
+}
+
 #spinner {
   width: 150px;
   height: 150px;

@@ -88,6 +88,7 @@ function submit() {
   var courseArr = [];
   if (inputMode === 'manual') {
     term = document.getElementById('termNumber').value;
+    numCourses = document.getElementById('numCourses2').value;
     for (let i = 1; i <= numCourses; ++i) {
       var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
       var firstDigit = courseString.search(/\d/)
