@@ -59,7 +59,24 @@ function isConflict(course1, course2) {
   return false
 }
 
-var term;
+function getTermFromQuest(scheduleString) {
+  let start = scheduleString.indexOf('L\n') + 2;
+  let end = scheduleString.indexOf('| Undergraduate |') - 1;
+  term = termMap.get(scheduleString.slice(start, end));
+}
+
+function getCoursesFromQuest(scheduleString, courseArr) {
+  let start = scheduleString.indexOf('Show Waitlisted Classes') + 24;
+  let end = scheduleString.indexOf('Printer Friendly Page') - 1;
+  let coursesString = scheduleString.slice(start, end);
+  var lines = coursesString.split('\n');
+  for (let i = 0; i < lines.length; i += 14) {
+    let courseString = lines[i].substr(0, lines[i].indexOf('-')-1).replace(/\s/g, '');
+    let firstDigit = courseString.search(/\d/);
+    courseArr.push([courseString.substring(0, firstDigit), courseString.substring(firstDigit)]);
+  }
+}
+
 function submit() {
   done = false;
   var myNode = document.getElementById("schedules");
@@ -68,14 +85,22 @@ function submit() {
   }
 
   document.getElementById("loading").style.display = 'block'
-  term = document.getElementById('termNumber').value;
   var courseArr = [];
-  for (let i = 1; i <= numCourses; ++i) {
-    var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
-    var firstDigit = courseString.search(/\d/)
-    var course = [courseString.substring(0, firstDigit), courseString.substring(firstDigit)]
-    courseArr.push(course)
+  if (inputMode === 'manual') {
+    term = document.getElementById('termNumber').value;
+    for (let i = 1; i <= numCourses; ++i) {
+      var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
+      var firstDigit = courseString.search(/\d/)
+      var course = [courseString.substring(0, firstDigit), courseString.substring(firstDigit)]
+      courseArr.push(course)
+    }
+  } else {
+    let scheduleString = document.getElementById("importQuest").value;
+    getTermFromQuest(scheduleString);
+    getCoursesFromQuest(scheduleString, courseArr);
+    numCourses = courseArr.length;
   }
+
   var morning = document.getElementById('morning').checked;
   var night = document.getElementById('night').checked;
   var courses = []
@@ -104,6 +129,10 @@ function submit() {
         isClassValid(myClass)
       )
       courses.push(validClasses)
+      if (validClasses.length === 0) {
+        alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
+        error = true
+      }
     }).then(() => {
       if (!error) {
         generateSchedules(courses)

@@ -26,6 +26,16 @@
             <div style="width: 50%; height: auto; float:left;">
               <div style="display: block; overflow: visible;" class="mdl-card__supporting-text">
                 <h3>Course Information</h3>
+                <div style="padding-bottom:20px">
+                  <label style="padding-right: 20%;" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="manual">
+                    <input type="radio" id="manual" class="mdl-radio__button" name="options" value="1" checked>
+                    <span class="mdl-radio__label">Manual Entry</span>
+                  </label>
+                  <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="import">
+                    <input type="radio" id="import" class="mdl-radio__button" name="options" value="2">
+                    <span class="mdl-radio__label">Import From Quest</span>
+                  </label>
+                </div>
         				<form id="form" action="#">
                   <div style="display: block" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
                     <input type="text" value="" class="mdl-textfield__input" readonly>
@@ -52,6 +62,17 @@
                     </ul>
                   </div>
         				</form>
+                <form id="importForm" action = "#" style="display: none">
+                  <p>1. <a href="https://quest.pecs.uwaterloo.ca/psp/SS/?cmd=login&languageCd=ENG" target="_blank">Sign in to Quest</a>
+                    and click Enroll.</p>
+                  <p>2. Select all and copy. (List View)</p>
+                  <p>3. Paste into the box below!</p>
+                  <p>4. Click the "Generate Schedules" button below.</p>
+                  <div style="width: 100%;" class = "mdl-textfield mdl-js-textfield">
+                     <textarea class="mdl-textfield__input" type="text" rows="11" id="importQuest"></textarea>
+                     <label class = "mdl-textfield__label" for = "text7">Paste Here!</label>
+                  </div>
+               </form>
         			</div>
             </div>
             <div style="width: 50%; float:right;">

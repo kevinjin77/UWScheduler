@@ -9,20 +9,6 @@ NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
     }
 }
 
-function myFunction() {
-  /* Get the text field */
-  var copyText = document.getElementById("myInput");
-
-  /* Select the text field */
-  copyText.select();
-
-  /* Copy the text inside the text field */
-  document.execCommand("Copy");
-
-  /* Alert the copied text */
-  alert("Copied the text: " + copyText.value);
-}
-
 var terms = [];
 var termNums = []
 const today = new Date();
@@ -40,6 +26,29 @@ if (currMonth >= 1 && currMonth <= 4) {
   termNums = [initTerm - 4, initTerm, initTerm + 2]
 }
 
+var termMap = new Map();
+for (let i = 0; i < terms.length; ++i) {
+  termMap.set(terms[i], termNums[i]);
+}
+
+var inputMode = 'manual';
+$('#manual').click(() => {
+  if (inputMode !== 'manual') {
+    document.getElementById('form').style.display = 'block';
+    document.getElementById('importForm').style.display = 'none';
+    document.getElementById('importQuest').value = '';
+    inputMode = 'manual';
+  }
+})
+
+$('#import').click(() => {
+  if (inputMode !== 'import') {
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('importForm').style.display = 'block';
+    inputMode = 'import';
+  }
+})
+
 for (let i = 0; i < 3; ++i) {
   let item = document.getElementById(`term${i}`)
   item.setAttribute('data-val', `${termNums[i]}`)
@@ -50,7 +59,9 @@ var numCourses;
 var input = document.getElementById('numCourses');
 input.onchange = function () {
   for (let i = 1; i <= numCourses; ++i) {
-    document.getElementById(`course${i}Input`).remove();
+    if (document.getElementById(`course${i}Input`)) {
+      document.getElementById(`course${i}Input`).remove();
+    }
   }
   let form = document.getElementById('form');
   numCourses = document.getElementById('numCourses2').value;
@@ -58,7 +69,7 @@ input.onchange = function () {
     let div = document.createElement('div');
     div.id = `course${i}Input`
     div.setAttribute('style', 'display: block;');
-    div.setAttribute('class', 'mdl-textfield mdl-js-textfield');
+    div.setAttribute('class', 'mdl-textfield mdl-js-textfield mdl-textfield--floating-label');
     componentHandler.upgradeElement(div);
     let input = document.createElement('input');
     input.setAttribute('class', 'mdl-textfield__input');

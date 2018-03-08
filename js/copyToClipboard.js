@@ -20,7 +20,7 @@ function copyTextToClipboard(text) {
         title: 'Schedule Copied to Clipboard!',
         text: `Paste the contents into UWFlow to create your schedule!<br>
         1. Navigate to uwflow.com<br>
-        2. Sign In/Register with your Facebook account<br>
+        2. Sign In/Register with your Facebook/Email account<br>
         3. Navigate to your profile and click the "Reimport" button<br>
         4. Paste`,
         positive: {
@@ -53,31 +53,12 @@ Group Box
 Collapse section Class Schedule Filter Options Class Schedule Filter Options
 Show Enrolled Classes
 Show Dropped Classes
-Show Waitlisted
+Show Waitlisted Classes
 `;
 
 var footer =
 `Printer Friendly Page
 Go to top iconGo to top`
-
-// var startDate;
-// var endDate;
-//
-// function getTermDates() {
-//   var settings = {
-//     "async": true,
-//     "crossDomain": true,
-//     "url": `https://api.uwaterloo.ca/v2/terms/${term}/importantdates.json?key=${uwApiKey}`,
-//     "method": "GET"
-//   }
-//
-//   $.ajax(settings).then(function (response) {
-//     startDate = response.data.find(el =>
-//       el.title === 'Lectures or classes begin at UWaterloo').start_date;
-//     endDate = response.data.find(el =>
-//       el.title === 'Lectures or classes end').start_date;
-//   })
-// }
 
 function convertDate(date) {
   let year = date.substr(0, date.indexOf('-'))
