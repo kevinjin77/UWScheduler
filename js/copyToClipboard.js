@@ -60,9 +60,36 @@ var footer =
 `Printer Friendly Page
 Go to top iconGo to top`
 
+// var startDate;
+// var endDate;
+//
+// function getTermDates() {
+//   var settings = {
+//     "async": true,
+//     "crossDomain": true,
+//     "url": `https://api.uwaterloo.ca/v2/terms/${term}/importantdates.json?key=${uwApiKey}`,
+//     "method": "GET"
+//   }
+//
+//   $.ajax(settings).then(function (response) {
+//     startDate = response.data.find(el =>
+//       el.title === 'Lectures or classes begin at UWaterloo').start_date;
+//     endDate = response.data.find(el =>
+//       el.title === 'Lectures or classes end').start_date;
+//   })
+// }
+
 function convertDate(date) {
-  let hour = parseInt(date.substr(0, date.indexOf(':')));
-  let minute = date.substr(date.indexOf(':') + 1);
+  let year = date.substr(0, date.indexOf('-'))
+  let minusYear = date.substr(date.indexOf('-') + 1);
+  let month = minusYear.substr(0, minusYear.indexOf('-'));
+  let day = minusYear.substr(minusYear.indexOf('-') + 1);
+  return `${month}/${day}/${year}`;
+}
+
+function convertTime(time) {
+  let hour = parseInt(time.substr(0, time.indexOf(':')));
+  let minute = time.substr(time.indexOf(':') + 1);
   if (hour >= 12) {
     return `${(hour === 12) ? 12 : hour - 12}:${minute}PM`
   } else {
@@ -87,14 +114,15 @@ Class Nbr	Section	Component	Days & Times	Room	Instructor	Start/End Date
 ${course.class_number}
 ${course.section.substr(course.section.indexOf(' ') + 1)}
 LEC
-${course.classes[0].date.weekdays} ${convertDate(course.classes[0].date.start_time)} - ${convertDate(course.classes[0].date.end_time)}
+${course.classes[0].date.weekdays} ${convertTime(course.classes[0].date.start_time)} - ${convertTime(course.classes[0].date.end_time)}
 ${course.classes[0].location.building} ${course.classes[0].location.room}
 ${fName} ${lName}
-01/03/2018 - 04/04/2018
+${convertDate(startDate)} - ${convertDate(endDate)}
 `;
 }
 
 function flowConvertSchedule(schedule) {
+  getTermDates()
   let courses = '';
   for (let i = 0; i < schedule.length; ++i) {
     courses += flowConvertCourse(schedule[i]);

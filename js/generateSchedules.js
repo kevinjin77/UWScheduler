@@ -59,6 +59,7 @@ function isConflict(course1, course2) {
   return false
 }
 
+var term;
 function submit() {
   done = false;
   var myNode = document.getElementById("schedules");
@@ -67,7 +68,7 @@ function submit() {
   }
 
   document.getElementById("loading").style.display = 'block'
-  var term = document.getElementById('termNumber').value;
+  term = document.getElementById('termNumber').value;
   var courseArr = [];
   for (let i = 1; i <= numCourses; ++i) {
     var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
@@ -150,9 +151,8 @@ function generateSchedules(courses) {
   let schedules = cartesianProduct(courseArr).filter(schedule =>
     isScheduleValid(schedule)
   )
-  console.log(flowConvertSchedule(schedules[0]))
   getTimes(schedules)
-  calculateProfessorRating(schedules)
+  getTermDates(schedules)
 }
 
 function compareTimes(time1, time2) {
@@ -196,6 +196,26 @@ function getTimes(schedules) {
     schedule.wTimes = [ ...new Set(wTimes) ].sort(compareTimes)
     schedule.thTimes = [ ...new Set(thTimes) ].sort(compareTimes)
     schedule.fTimes = [ ...new Set(fTimes) ].sort(compareTimes)
+  })
+}
+
+var startDate;
+var endDate;
+function getTermDates(schedules) {
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": `https://api.uwaterloo.ca/v2/terms/${term}/importantdates.json?key=${uwApiKey}`,
+    "method": "GET"
+  }
+
+  $.ajax(settings).then(function (response) {
+    startDate = response.data.find(el =>
+      el.title === 'Lectures or classes begin at UWaterloo').start_date;
+    endDate = response.data.find(el =>
+      el.title === 'Lectures or classes end').start_date;
+  }).then(() => {
+    calculateProfessorRating(schedules)
   })
 }
 

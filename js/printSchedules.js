@@ -65,7 +65,7 @@ function printClasses(schedule, index) {
 }
 
 function printSchedules(schedules) {
-  document.getElementById("loading").style.display = 'none'
+  document.getElementById("loading").style.display = 'none';
   for (let i = 0; i < Math.min(schedules.length, 100); ++i) {
     let div = document.getElementById('schedules');
     let table = document.createElement('table');
