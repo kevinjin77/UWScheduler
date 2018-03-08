@@ -34,7 +34,7 @@ function printClass(myClass, index) {
   instructor.innerHTML = courseProfessor;
   var rating = document.createElement('td');
   rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  if (courseRating === 'Not Found') {
+  if (courseRating === 'Not Found' && courseProfessor) {
     let commaIndex = courseProfessor.indexOf(',')
     let spaceIndex = courseProfessor.indexOf(' ')
     let lName = courseProfessor.substring(0, commaIndex)
