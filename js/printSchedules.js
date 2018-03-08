@@ -107,9 +107,12 @@ function printSchedules(schedules) {
     list.appendChild(prof);
     list.appendChild(overall);
     printClasses(schedules[i], i);
-    div.appendChild(list);
+    let listDiv = document.createElement('div');
+    listDiv.setAttribute('style', 'float: left; display:inline-block;')
+    listDiv.appendChild(list);
+    div.appendChild(listDiv);
     let buttonDiv = document.createElement('div');
-    buttonDiv.setAttribute('style', 'display:inline-block; vertical-align:top;');
+    buttonDiv.setAttribute('style', 'float: right; display:inline-block;');
     let exportBtn = document.createElement('button');
     exportBtn.className = 'mdl-button mdl-js-button mdl-button--icon'
     exportBtn.onclick = () => {
@@ -119,7 +122,10 @@ function printSchedules(schedules) {
     icon.className = 'material-icons';
     icon.innerHTML = 'assignment';
     exportBtn.appendChild(icon);
+    let label = document.createElement('label');
+    label.innerHTML = "Copy Schedule To Clipboard"
     buttonDiv.appendChild(exportBtn);
+    buttonDiv.appendChild(label)
     div.appendChild(buttonDiv);
   }
 }
