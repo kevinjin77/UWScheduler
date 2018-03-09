@@ -94,7 +94,7 @@ Academic Calendar Deadlines
 Class Nbr	Section	Component	Days & Times	Room	Instructor	Start/End Date
 ${course.class_number}
 ${course.section.substr(course.section.indexOf(' ') + 1)}
-LEC
+${course.section.substr(0, course.section.indexOf(' '))}
 ${course.classes[0].date.weekdays} ${convertTime(course.classes[0].date.start_time)} - ${convertTime(course.classes[0].date.end_time)}
 ${course.classes[0].location.building} ${course.classes[0].location.room}
 ${fName} ${lName}

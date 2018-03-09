@@ -22,6 +22,15 @@ function printClass(myClass, index) {
   section.innerHTML = courseSection;
   var enrolled = document.createElement('td');
   enrolled.setAttribute('class', 'mdl-data-table__cell--non-numeric');
+  if (myClass.enrollment_total === 0) {
+    enrolled.setAttribute('style', 'color: black');
+  } else if (myClass.enrollment_total >= myClass.enrollment_capacity) {
+    enrolled.setAttribute('style', 'color: #F44336');
+  } else if (myClass.enrollment_capacity - myClass.enrollment_total <= 10) {
+    enrolled.setAttribute('style', 'color: #FF9800');
+  } else {
+    enrolled.setAttribute('style', 'color: #4CAF50');
+  }
   enrolled.innerHTML = courseEnrollment;
   var time = document.createElement('td');
   time.setAttribute('class', 'mdl-data-table__cell--non-numeric');
