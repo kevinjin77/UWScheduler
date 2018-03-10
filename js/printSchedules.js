@@ -64,7 +64,9 @@ function printClass(myClass, index) {
   tr.appendChild(location);
   tr.appendChild(instructor);
   tr.appendChild(rating);
-  if (myClass.section.includes("TUT")) {
+  if (myClass.section.includes("LEC")) {
+    tr.setAttribute('style', 'display: table-row');
+  } else {
     tr.setAttribute('style', 'display: none');
   }
   table.appendChild(tr);
@@ -124,11 +126,23 @@ function printSchedules(schedules) {
     listDiv.appendChild(list);
     div.appendChild(listDiv);
     let buttonDiv = document.createElement('div');
-    buttonDiv.setAttribute('style', 'float: right; display:inline-block;');
+    buttonDiv.setAttribute('style', 'float: right; display:inline-block; padding-top:22px;');
     let exportBtn = document.createElement('button');
     exportBtn.className = 'mdl-button mdl-js-button mdl-button--icon'
     exportBtn.onclick = () => {
       copyTextToClipboard(flowConvertSchedule(schedules[i]));
+    }
+    let tutorialBtn = document.createElement('button');
+    tutorialBtn.setAttribute('style', 'display: block');
+    tutorialBtn.className = 'mdl-button mdl-js-button mdl-button--raised'
+    tutorialBtn.innerHTML = "Show Tutorials";
+    tutorialBtn.onclick = () => {
+      let tbody = document.getElementById(`schedules${i}`);
+      for (let i = 0; i < tbody.children.length; ++i) {
+        if (tbody.children[i].style.display === 'none') {
+          tbody.children[i].style.display = 'table-row';
+        }
+      }
     }
     let icon = document.createElement('i');
     icon.className = 'material-icons';
@@ -136,6 +150,7 @@ function printSchedules(schedules) {
     exportBtn.appendChild(icon);
     let label = document.createElement('label');
     label.innerHTML = "Copy Schedule To Clipboard"
+    buttonDiv.appendChild(tutorialBtn);
     buttonDiv.appendChild(exportBtn);
     buttonDiv.appendChild(label)
     div.appendChild(buttonDiv);
