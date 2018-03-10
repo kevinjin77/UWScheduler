@@ -355,7 +355,6 @@ function calculateProfessorRating(schedules) {
     }
 
     $.ajax(settings).then(function (response) {
-      console.log(response);
       noRes = (response.professors.length === 0)
       let rating = noRes ? -1 : parseFloat(response.professors[0].overall_rating)
       profsRatings.push([profs[i], rating])
