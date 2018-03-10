@@ -64,6 +64,9 @@ function printClass(myClass, index) {
   tr.appendChild(location);
   tr.appendChild(instructor);
   tr.appendChild(rating);
+  if (myClass.section.includes("TUT")) {
+    tr.setAttribute('style', 'display: none');
+  }
   table.appendChild(tr);
 }
 

@@ -80,11 +80,18 @@ function convertTime(time) {
 
 function flowConvertCourse(course) {
   let courseProfessor = course.classes[0].instructors[0];
-  let commaIndex = courseProfessor.indexOf(',');
-  let spaceIndex = courseProfessor.indexOf(' ');
-  let lName = courseProfessor.substring(0, commaIndex);
-  let fName = spaceIndex === -1 ? courseProfessor.substring(commaIndex + 1) :
-  courseProfessor.substring(commaIndex + 1, spaceIndex);
+  let fName;
+  let lName;
+  if (courseProfessor) {
+    let commaIndex = courseProfessor.indexOf(',');
+    let spaceIndex = courseProfessor.indexOf(' ');
+    lName = courseProfessor.substring(0, commaIndex);
+    fName = spaceIndex === -1 ? courseProfessor.substring(commaIndex + 1) :
+    courseProfessor.substring(commaIndex + 1, spaceIndex);
+  } else {
+    lName = '';
+    fName = '';
+  }
   return `${course.subject} ${course.catalog_number} - ${course.title}
 Status	Units	Grading	Deadlines
 Enrolled

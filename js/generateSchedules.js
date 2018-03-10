@@ -40,9 +40,6 @@ function isTimeConflict(start1, end1, start2, end2) {
 }
 
 function isConflict(course1, course2) {
-  if (!(course1.section.includes("LEC") && course2.section.includes("LEC"))) {
-    return true
-  }
   let class1 = course1.classes[0]
   let class2 = course2.classes[0]
   let days1 = processDate(class1.date.weekdays)
@@ -88,7 +85,7 @@ function submit() {
   var courseArr = [];
   if (inputMode === 'manual') {
     term = document.getElementById('termNumber').value;
-    numCourses = document.getElementById('numCourses2').value;
+    numCourses = parseInt(document.getElementById('numCourses2').value);
     for (let i = 1; i <= numCourses; ++i) {
       var courseString = document.getElementById(`course${i}`).value.toUpperCase().replace(/\s/g, '');
       var firstDigit = courseString.search(/\d/)
@@ -129,8 +126,19 @@ function submit() {
       let validClasses = response.data.filter(myClass =>
         isClassValid(myClass)
       )
-      courses.push(validClasses)
-      if (validClasses.length === 0) {
+      let lecs = [];
+      let tuts = []
+      validClasses.forEach(course => {
+        course.section.includes("LEC") ? lecs.push(course) : tuts.push(course);
+      })
+      if (lecs.length > 0) {
+        courses.push(lecs);
+      }
+      if (tuts.length > 0) {
+        courses.push(tuts);
+        numCourses++;
+      }
+      if (lecs.length === 0) {
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
         error = true
       }
@@ -147,7 +155,7 @@ function submit() {
 function isClassValid(myClass) {
   return !(!morning.checked && myClass.classes[0].date.start_time === '08:30')  &&
   !(!night.checked && new Date(`1/1/2016 ${myClass.classes[0].date.start_time}`) >= new Date("1/1/2016 18:00")) &&
-  !(myClass.campus !== 'UW U') && (myClass.section.includes("LEC"))
+  !(myClass.campus !== 'UW U') && ((myClass.section.includes("LEC")) || (myClass.section.includes("TUT")))
 }
 
 function isScheduleValid(schedule) {
@@ -178,7 +186,8 @@ function generateSchedules(courses) {
   for (let i = 0; i < numCourses; ++i) {
     courseArr.push(courses[i]);
   }
-  let schedules = cartesianProduct(courseArr).filter(schedule =>
+  let schedules = cartesianProduct(courseArr);
+  schedules = schedules.filter(schedule =>
     isScheduleValid(schedule)
   )
   getTimes(schedules)
@@ -321,6 +330,7 @@ function calculateProfessorRating(schedules) {
   var profs = []
   schedules.forEach(schedule => {
     for (let i = 0; i < schedule.length; ++i) {
+      if (!schedule[i].section.includes("LEC")) continue;
       let professor = schedule[i].classes[0].instructors[0]
       if (professor && !profs.includes(professor)) {
         profs.push(professor)
@@ -352,15 +362,17 @@ function calculateProfessorRating(schedules) {
       if (profsRatings.length === profs.length && !done) {
         done = true;
         let profsMap = new Map(profsRatings)
+        let numTuts = schedules[0].filter(el => el.section.includes("TUT")).length;
         schedules.forEach((schedule) => {
           let totalRating = 0
           for (let i = 0; i < schedule.length; ++i) {
+            if (schedule[i].section.includes("TUT")) continue;
             let score = profsMap.get(schedule[i].classes[0].instructors[0])
             let rating = (!score || score === -1) ? 2 : score
             schedule[i].classes[0].rating = (!score || score === -1) ? 'Not Found' : score
             totalRating += rating
           }
-          schedule.professorRating = totalRating / schedule.length
+          schedule.professorRating = totalRating / (schedule.length - numTuts)
         })
         calculateGapRating(schedules)
         calculateLunchRating(schedules)
@@ -377,8 +389,10 @@ function getGapRating(times) {
     let start = new Date(`1/1/2016 ${times[i]}`)
     let end = new Date(`1/1/2016 ${times[i+1]}`)
     let elapsed = (end - start) / 60000
-    if (elapsed > 10 && elapsed <= 70) {
-      --rating
+    if (elapsed <= 10) {
+      ++rating;
+    } else if ( elapsed <= 70) {
+      --rating;
     }
   }
   return rating
@@ -404,10 +418,8 @@ function getLunchRating(times) {
       let elapsed = (end - start) / 60000
       if (elapsed <= 30) {
         rating = Math.max(0, rating)
-      } else if (elapsed <= 70) {
-        rating = Math.max(1, rating)
       } else {
-        rating = Math.max(2, rating)
+        rating = Math.max(1, rating)
       }
     }
   }
@@ -425,7 +437,7 @@ function calculateRating(schedules) {
   schedules.forEach(schedule => {
     schedule.overallRating = schedule.professorRating * 20 * (professorSlider.value / 5) +
     schedule.lunchRating * (lunchSlider.value / 5) +
-    schedule.gapRating * 0.5 * (gapSlider.value / 5)
+    schedule.gapRating * (gapSlider.value / 5)
   })
   schedules.sort((a, b) => b.overallRating - a.overallRating)
   printSchedules(schedules)
