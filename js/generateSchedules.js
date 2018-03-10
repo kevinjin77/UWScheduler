@@ -67,7 +67,7 @@ function getCoursesFromQuest(scheduleString, courseArr) {
   let end = scheduleString.indexOf('Printer Friendly Page') - 1;
   let coursesString = scheduleString.slice(start, end);
   var lines = coursesString.split('\n');
-  for (let i = 0; i < lines.length; i += 14) {
+  for (let i = 1; i < lines.length; i += 14) {
     let courseString = lines[i].substr(0, lines[i].indexOf('-')-1).replace(/\s/g, '');
     let firstDigit = courseString.search(/\d/);
     courseArr.push([courseString.substring(0, firstDigit), courseString.substring(firstDigit)]);
