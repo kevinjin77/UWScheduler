@@ -347,14 +347,15 @@ function calculateProfessorRating(schedules) {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": `https://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${fName}+${lName}`,
+      "url": `https://cors-anywhere.herokuapp.com/https://www.ratemyprofessors.com/find/professor/?&page=1&sid=1490&queryoption=TEACHER&queryBy=teacherName&query=${fName}+${lName}`,
       "method": "GET",
-      "error": function () {
-        alert("Oops! Something went wrong. Please try again later.")
-      }
+      // "error": function () {
+      //   alert("Oops! Something went wrong. Please try again later.")
+      // }
     }
 
     $.ajax(settings).then(function (response) {
+      console.log(response);
       noRes = (response.professors.length === 0)
       let rating = noRes ? -1 : parseFloat(response.professors[0].overall_rating)
       profsRatings.push([profs[i], rating])
