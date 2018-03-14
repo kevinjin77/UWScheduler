@@ -71,7 +71,7 @@
                   <p>3. Paste into the box below!</p>
                   <p>4. Click the "Generate Schedules" button below.</p>
                   <div id="questBox" style="width: 100%;" class = "mdl-textfield mdl-js-textfield">
-                     <textarea class="mdl-textfield__input" type="text" rows="11" id="importQuest"></textarea>
+                     <textarea class="mdl-textfield__input" type="text" rows="13" id="importQuest"></textarea>
                      <label class = "mdl-textfield__label" for = "text7">Paste Here!</label>
                   </div>
                </form>
@@ -79,19 +79,23 @@
             </div>
             <div style="width: 50%; float:right;">
               <div class="mdl-card__supporting-text">
-                <h3>Preferences</h3>
-                <div style="padding-bottom: 30px; text-align: center;">
-                  <p>Gap (I want as few 70 minute gaps between classes as possible.)</p>
+                <h3 style="margin-bottom: 0;">Preferences</h3>
+                <p style="margin-left: 20px;">Rate each of the following factors from 0 (not important) to 10 (very important).</p>
+                <div style="padding-bottom: 20px; text-align: center;">
+                  <strong>Gap</strong>
+                  <p>I want as few 70 minute gaps between classes as possible.</p>
                   <input id="gapSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
                   <p id="gapWeight">5</p>
                 </div>
-                <div style="padding-bottom: 30px; text-align: center;">
-                  <p>Lunch (I want to have as much time as possible for lunch.)</p>
+                <div style="padding-bottom: 20px; text-align: center;">
+                  <strong>Lunch</strong>
+                  <p>I want to have as much time as possible for lunch.</p>
                   <input id="lunchSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
                   <p id="lunchWeight">5</p>
                 </div>
-                <div style="padding-bottom: 30px; text-align: center;">
-                  <p>Professor (I want the best professors.)</p>
+                <div style="padding-bottom: 20px; text-align: center;">
+                  <strong>Professor</strong>
+                  <p>I want the best professors.</p>
                   <input id="professorSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
                   <p id="professorWeight">5</p>
                 </div>
