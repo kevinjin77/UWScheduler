@@ -3,7 +3,7 @@
 An application to help Waterloo students find the best possible schedules to fit their needs. Check it out at [uwscheduler.com]!
 
 # Features
-
+Some Markdown text with <span style="color:blue">some *blue* text</span>.
 ## Course Entry
 There are two methods of importing your schedule into UWScheduler.
 
@@ -18,13 +18,20 @@ To import your courses from Quest, simply follow these steps:
 4. Click the "Generate Schedules" button.
 
 ## Preferences
-
+In the preferences section, you can enter how important each of the following factors is to creating the best schedule for you.
+Each factor can be rated from a scale of 0 (uninimportant) to 10 (extremely important).
+- **Gap** (Rate this highly if you want as few of the annoying 70 minute gaps in your schedule as possible.)
+- **Lunch** (Rate this highly if you want a lengthy period of time for lunch on as many days as possible.)
+- **Professor** (Rate this highly if you want the best professors according to their ratings on RateMyProfessors.)
+You can also enter if you're OK with 8:30AM classes, or night classes (after 6:00PM).
 
 ## Generating Schedules
-
+Once all of your courses and preferences are entered, click the Generate Schedules button!
 
 ### What's in a Schedule?
-
+After loading briefly, a list of the top 100 schedules will appear underneath the form.
+Each schedule contains all of the courses that have been selected for your schedule, as well as information about the location, times, enrollment, and more.
+Underneath every schedule is a list of its ratings, as well as its overall rating, which is highlighted in <span style="color:red">some **This is Red Bold.** text</span>.
 
 ### Show Tutorials
 
