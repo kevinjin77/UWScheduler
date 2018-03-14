@@ -3,7 +3,6 @@
 An application to help Waterloo students find the best possible schedules to fit their needs. Check it out at [uwscheduler.com]!
 
 # Features
-![alt text](https://github.com/kevinjin77/UWScheduler/blob/master/img/quest.png "Logo Title Text 1")
 ## Course Entry
 There are two methods of importing your schedule into UWScheduler.
 
