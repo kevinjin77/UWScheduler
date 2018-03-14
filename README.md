@@ -3,7 +3,6 @@
 An application to help Waterloo students find the best possible schedules to fit their needs. Check it out at [uwscheduler.com]!
 
 # Features
-Some Markdown text with <span style="color:blue">some *blue* text</span>.
 ## Course Entry
 There are two methods of importing your schedule into UWScheduler.
 
@@ -31,10 +30,15 @@ Once all of your courses and preferences are entered, click the Generate Schedul
 ### What's in a Schedule?
 After loading briefly, a list of the top 100 schedules will appear underneath the form.
 Each schedule contains all of the courses that have been selected for your schedule, as well as information about the location, times, enrollment, and more.
-Underneath every schedule is a list of its ratings, as well as its overall rating, which is highlighted in <span style="color:red">some **This is Red Bold.** text</span>.
+Underneath every schedule is a list of its ratings, as well as its overall rating, which is highlighted in red.
 
 ### Show Tutorials
-
+Also under each schedule is the "Show Tutorials" button, which upon clicking will add all of the tutorials to that given schedule.
 
 ### Exporting to UWFlow
-
+Finally, each schedule has the option to export it directly to UWFlow.
+1. Click on "Copy Schedule to Clipboard"
+2. After the modal appears, navigate to [UWFlow](https://uwflow.com/)
+3. Sign in using either your Facebook/Email account.
+4. Click the "Reimport" Button.
+5. Highlight the textbox, and paste!
