@@ -31,6 +31,17 @@ for (let i = 0; i < terms.length; ++i) {
   termMap.set(terms[i], termNums[i]);
 }
 
+$('#calendar').fullCalendar({
+  defaultView: 'agendaWeek',
+  weekends: false,
+  allDaySlot: false,
+  minTime: '8:00:00',
+  maxTime: '16:30:00',
+  contentHeight: 'auto',
+  header: false,
+  aspectRatio: 1
+});
+
 var inputMode = 'manual';
 $('#manual').click(() => {
   if (inputMode !== 'manual') {
