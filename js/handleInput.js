@@ -31,23 +31,23 @@ for (let i = 0; i < terms.length; ++i) {
   termMap.set(terms[i], termNums[i]);
 }
 
-// $('#calendar').fullCalendar({
-//   defaultView: 'agendaWeek',
-//   weekends: false,
-//   allDaySlot: false,
-//   minTime: '8:00:00',
-//   maxTime: '16:30:00',
-//   contentHeight: 'auto',
-//   header: false,
-//   aspectRatio: 1,
-//   events: [
-//     {
-//       title: 'CS241',
-//       start: '2018-03-14T12:30:00',
-//       end: '2018-03-14T13:30:00'
-//     }
-//   ]
-// });
+$('#calendar').fullCalendar({
+  defaultView: 'agendaWeek',
+  weekends: false,
+  allDaySlot: false,
+  minTime: '8:00:00',
+  maxTime: '16:30:00',
+  contentHeight: 'auto',
+  header: false,
+  aspectRatio: 1,
+  events: [
+    {
+      title: 'CS241',
+      start: '2018-03-14T12:30:00',
+      end: '2018-03-14T13:30:00'
+    }
+  ]
+});
 
 var inputMode = 'manual';
 $('#manual').click(() => {
