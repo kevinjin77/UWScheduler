@@ -125,6 +125,9 @@ function printSchedules(schedules) {
     listDiv.setAttribute('style', 'float: left; display:inline-block;')
     listDiv.appendChild(list);
     div.appendChild(listDiv);
+    let calendarDiv = document.createElement('div');
+    calendarDiv.setAttribute('id', 'calendar' + i);
+    div.appendChild(calendarDiv);
     let buttonDiv = document.createElement('div');
     buttonDiv.setAttribute('style', 'float: right; display:inline-block; padding-top:22px;');
     let exportBtn = document.createElement('button');
@@ -144,6 +147,26 @@ function printSchedules(schedules) {
         }
       }
     }
+    let calendarBtn = document.createElement('button');
+    calendarBtn.setAttribute('style', 'display: block');
+    calendarBtn.className = 'mdl-button mdl-js-button mdl-button--raised'
+    calendarBtn.innerHTML = "Show Calendar";
+    calendarBtn.onclick = () => {
+      let events = getEvents(schedules[i]);
+      $(`#calendar${i}`).fullCalendar({
+        defaultView: 'agendaWeek',
+        columnHeaderFormat: 'ddd',
+        weekends: false,
+        allDaySlot: false,
+        minTime: '8:00:00',
+        maxTime: '16:30:00',
+        contentHeight: 'auto',
+        header: false,
+        aspectRatio: 1,
+        defaultDate: `2018-02-12`,
+        events: events
+      });
+    }
     let icon = document.createElement('i');
     icon.className = 'material-icons';
     icon.innerHTML = 'assignment';
@@ -151,8 +174,48 @@ function printSchedules(schedules) {
     let label = document.createElement('label');
     label.innerHTML = "Copy Schedule To Clipboard"
     buttonDiv.appendChild(tutorialBtn);
+    buttonDiv.appendChild(calendarBtn);
     buttonDiv.appendChild(exportBtn);
     buttonDiv.appendChild(label)
     div.appendChild(buttonDiv);
+
   }
+}
+
+function getEvents(schedule) {
+  let events = [];
+  schedule.forEach(course => {
+    let days = processDate(course.classes[0].date.weekdays);
+    days.forEach(dayName => {
+      let day;
+      switch(dayName) {
+        case 'M':
+          day = 0;
+          break;
+        case 'T':
+          day = 1;
+          break;
+        case 'W':
+          day = 2;
+          break;
+        case 'Th':
+          day = 3;
+          break;
+        case 'F':
+          day = 4;
+          break;
+        default:
+          day = 0;
+      }
+      events.push(
+        {
+          title: `${course.subject}${course.catalog_number} - ${course.section}`,
+          start: `2018-02-${12 + day}T${course.classes[0].date.start_time}`,
+          end: `2018-02-${12 + day}T${course.classes[0].date.end_time}`,
+          color: course.section.includes("TUT") && 'green'
+        }
+      )
+    })
+  })
+  return events;
 }
