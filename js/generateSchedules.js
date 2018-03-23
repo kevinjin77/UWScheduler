@@ -57,9 +57,13 @@ function isConflict(course1, course2) {
 }
 
 function getTermFromQuest(scheduleString) {
-  let start = scheduleString.indexOf('L\n') + 2;
-  let end = scheduleString.indexOf('| Undergraduate |') - 1;
-  term = termMap.get(scheduleString.slice(start, end));
+  var lines = scheduleString.split('\n');
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].includes('| Undergraduate | University of Waterloo')) {
+      term = termMap.get(lines[i].slice(0, lines[i].indexOf('|') - 1));
+      break;
+    }
+  }
 }
 
 function getCoursesFromQuest(scheduleString, courseArr) {
@@ -67,10 +71,12 @@ function getCoursesFromQuest(scheduleString, courseArr) {
   let end = scheduleString.indexOf('Printer Friendly Page') - 1;
   let coursesString = scheduleString.slice(start, end);
   var lines = coursesString.split('\n');
-  for (let i = 1; i < lines.length; i += 14) {
-    let courseString = lines[i].substr(0, lines[i].indexOf('-')-1).replace(/\s/g, '');
-    let firstDigit = courseString.search(/\d/);
-    courseArr.push([courseString.substring(0, firstDigit), courseString.substring(firstDigit)]);
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].includes('Status')) {
+      let courseString = lines[i-1].substr(0, lines[i-1].indexOf('-')-1).replace(/\s/g, '');
+      let firstDigit = courseString.search(/\d/);
+      courseArr.push([courseString.substring(0, firstDigit), courseString.substring(firstDigit)]);
+    }
   }
 }
 
