@@ -2,6 +2,8 @@
 
 An application to help Waterloo students find the best possible schedules to fit their needs. Check it out at [uwscheduler.com]!
 
+![Landing Page](https://github.com/kevinjin77/UWScheduler/raw/master/img/inputForm.png "Landing Page")
+
 # Features
 ## Course Entry
 There are two methods of importing your schedule into UWScheduler.
@@ -32,8 +34,15 @@ After loading briefly, a list of the top 100 schedules will appear underneath th
 Each schedule contains all of the courses that have been selected for your schedule, as well as information about the location, times, enrollment, and more.
 Underneath every schedule is a list of its ratings, as well as its overall rating, which is highlighted in red.
 
+![Sample Schedule](https://github.com/kevinjin77/UWScheduler/raw/master/img/sampleSchedule.png "Sample Schedule")
+
 ### Show Tutorials
 Also under each schedule is the "Show Tutorials" button, which upon clicking will add all of the tutorials to that given schedule.
+
+### Show Calendar
+Using FullCalendar, users may also view their schedule directly from the website.
+
+![Sample Calendar](https://github.com/kevinjin77/UWScheduler/raw/master/img/sampleCalendar.png "Sample Calendar")
 
 ### Exporting to UWFlow
 Finally, each schedule has the option to export it directly to UWFlow.
