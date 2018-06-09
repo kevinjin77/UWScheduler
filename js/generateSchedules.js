@@ -2,6 +2,7 @@ const uwApiKey = "a0fa5a0445627c840d18a3cf30d89995";
 const googleApiKey = "AIzaSyDbxPyrNeLrgCJE_Fip-jqXcIJj3BzTLEw";
 var done = false;
 
+// Takes a date string (eg. "MWThF") and returns a list of days ["M", "W", "Th", "F"]
 function processDate(weekdays) {
   var index = 0;
   var dayList = [];
@@ -39,6 +40,7 @@ function isTimeConflict(start1, end1, start2, end2) {
    return ((start1.getTime() <= end2.getTime()) && (end1.getTime() >= start2.getTime()))
 }
 
+// Determines if two courses have overlapping times.
 function isConflict(course1, course2) {
   let class1 = course1.classes[0]
   let class2 = course2.classes[0]
@@ -56,6 +58,7 @@ function isConflict(course1, course2) {
   return false
 }
 
+// Function to process input if user chooses to input schedule from Quest rather than manual entry.
 function getTermFromQuest(scheduleString) {
   var lines = scheduleString.split('\n');
   for (let i = 1; i < lines.length; i++) {
@@ -66,6 +69,7 @@ function getTermFromQuest(scheduleString) {
   }
 }
 
+// Function to process input if user chooses to input schedule from Quest rather than manual entry.
 function getCoursesFromQuest(scheduleString, courseArr) {
   let start = scheduleString.indexOf('Show Waitlisted Classes') + 24;
   let end = scheduleString.indexOf('Printer Friendly Page') - 1;
@@ -80,14 +84,19 @@ function getCoursesFromQuest(scheduleString, courseArr) {
   }
 }
 
+// On clicking Generate schedules, this function is fired.
 function submit() {
   done = false;
+  // Clear the page of any existing schedules.
   var myNode = document.getElementById("schedules");
   while (myNode.firstChild) {
     myNode.removeChild(myNode.firstChild);
   }
 
+  // Display loading spinner.
   document.getElementById("loading").style.display = 'block'
+
+  // Based on user input, add courses to courseArr.
   var courseArr = [];
   if (inputMode === 'manual') {
     term = document.getElementById('termNumber').value;
@@ -107,6 +116,8 @@ function submit() {
 
   var morning = document.getElementById('morning').checked;
   var night = document.getElementById('night').checked;
+
+  // For each course, determine information about its offered lectures and tutorials.
   var courses = []
   for (let i = 0; i < numCourses; ++i) {
     var error = false;
@@ -145,6 +156,7 @@ function submit() {
         numCourses++;
       }
       if (lecs.length === 0) {
+        // If nothing is returned, alert user that course is not being offered.
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
         error = true
       }
@@ -152,18 +164,22 @@ function submit() {
       if (!error) {
         generateSchedules(courses)
       } else {
+        // If error occurred, hide loading spinner.
         document.getElementById("loading").style.display = 'none'
       }
     })
   }
 }
 
+// If user didn't check the morning box, remove all 8:30AM classes.
+// If user didn't check the night box, remove all classes starting after 6:00PM.
 function isClassValid(myClass) {
   return !(!morning.checked && myClass.classes[0].date.start_time === '08:30')  &&
   !(!night.checked && new Date(`1/1/2016 ${myClass.classes[0].date.start_time}`) >= new Date("1/1/2016 18:00")) &&
   !(myClass.campus !== 'UW U') && ((myClass.section.includes("LEC")) || (myClass.section.includes("TUT")))
 }
 
+// If any two courses in a schedule overlap, it's considered invalid.
 function isScheduleValid(schedule) {
   for (let i = 0 ; i < schedule.length - 1; ++i) {
     for (let j = i+1; j < schedule.length; ++j) {
@@ -192,10 +208,15 @@ function generateSchedules(courses) {
   for (let i = 0; i < numCourses; ++i) {
     courseArr.push(courses[i]);
   }
+  // Generate a giant list of schedules, representing all possible combinations of each courses' lectures/tutorials.
   let schedules = cartesianProduct(courseArr);
+
+  // If schedule is invalid, filter it out.
   schedules = schedules.filter(schedule =>
     isScheduleValid(schedule)
   )
+
+  // Add times and dates to each schedule.
   getTimes(schedules)
   getTermDates(schedules)
 }
@@ -244,6 +265,8 @@ function getTimes(schedules) {
   })
 }
 
+
+// Get the start/end dates for the given term.
 var startDate;
 var endDate;
 function getTermDates(schedules) {

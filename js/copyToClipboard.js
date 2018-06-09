@@ -78,6 +78,7 @@ function convertTime(time) {
   }
 }
 
+// Convert Schedule to string that is recognizable by UWFlow (See sampleFlow.txt)
 function flowConvertCourse(course) {
   let courseProfessor = course.classes[0].instructors[0];
   let fName;
