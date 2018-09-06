@@ -279,9 +279,9 @@ function getTermDates(schedules) {
 
   $.ajax(settings).then(function (response) {
     startDate = response.data.find(el =>
-      el.title === 'Lectures or classes begin at UWaterloo').start_date;
+      el.title.includes('Lectures or classes begin')).start_date;
     endDate = response.data.find(el =>
-      el.title === 'Lectures or classes end').start_date;
+      el.title.includes('Lectures or classes end')).start_date;
   }).then(() => {
     calculateProfessorRating(schedules)
   })
