@@ -94,7 +94,7 @@ function submit() {
   }
 
   // Display loading spinner.
-  document.getElementById("loading").style.display = 'block'
+  document.getElementById("loading").style.display = 'block';
 
   // Based on user input, add courses to courseArr.
   var courseArr = [];
@@ -215,6 +215,12 @@ function generateSchedules(courses) {
   schedules = schedules.filter(schedule =>
     isScheduleValid(schedule)
   )
+
+  if (schedules.length == 0) {
+    document.getElementById("loading").style.display = 'none';
+    alert(`No valid schedules can be made!`);
+    return;
+  }
 
   // Add times and dates to each schedule.
   getTimes(schedules)

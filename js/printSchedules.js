@@ -153,13 +153,14 @@ function printSchedules(schedules) {
     calendarBtn.innerHTML = "Show Calendar";
     calendarBtn.onclick = () => {
       let events = getEvents(schedules[i]);
+      let maxTime = events.map(event => new Date(`1/1/2016 ${event.endTime}`)).sort(function(a,b){return b.getTime() - a.getTime()})[0];
       $(`#calendar${i}`).fullCalendar({
         defaultView: 'agendaWeek',
         columnHeaderFormat: 'ddd',
         weekends: false,
         allDaySlot: false,
         minTime: '8:00:00',
-        maxTime: '16:30:00',
+        maxTime: `${maxTime.getHours() + 1}:00:00`,
         contentHeight: 'auto',
         header: false,
         aspectRatio: 1,
@@ -212,6 +213,7 @@ function getEvents(schedule) {
           title: `${course.subject}${course.catalog_number} - ${course.section}`,
           start: `2018-02-${12 + day}T${course.classes[0].date.start_time}`,
           end: `2018-02-${12 + day}T${course.classes[0].date.end_time}`,
+          endTime: course.classes[0].date.end_time,
           color: course.section.includes("TUT") && 'green'
         }
       )
