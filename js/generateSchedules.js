@@ -273,24 +273,25 @@ function getTimes(schedules) {
 
 
 // Get the start/end dates for the given term.
-var startDate;
-var endDate;
 function getTermDates(schedules) {
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": `https://api.uwaterloo.ca/v2/terms/${term}/importantdates.json?key=${uwApiKey}`,
-    "method": "GET"
-  }
+  var startDate;
+  var endDate;
 
-  $.ajax(settings).then(function (response) {
-    startDate = response.data.find(el =>
-      el.title.includes('Lectures or classes begin')).start_date;
-    endDate = response.data.find(el =>
-      el.title.includes('Lectures or classes end')).start_date;
-  }).then(() => {
-    calculateProfessorRating(schedules)
-  })
+  let year = Math.floor((parseInt(term) - 1000) / 10) + 2000
+  if (term.endsWith('1')) {
+    startDate = `${year}-01-01`;
+    endDate = `${year}-04-30`;
+  } else if (term.endsWith('5')) {
+    startDate = `${year}-05-01`;
+    endDate = `${year}-08-31`;
+  } else if (term.endsWith('9')) {
+    startDate = `${year}-09-01`;
+    endDate = `${year}-12-31`;
+  }
+  console.log(startDate)
+  console.log(endDate)
+
+  calculateProfessorRating(schedules)
 }
 
 // function calculateDistanceRating(schedules) {

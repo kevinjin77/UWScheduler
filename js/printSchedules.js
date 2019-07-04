@@ -40,7 +40,7 @@ function printClass(myClass, index) {
   location.innerHTML = courseLocation;
   var instructor = document.createElement('td');
   instructor.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  instructor.innerHTML = courseProfessor;
+  instructor.innerHTML = courseProfessor.replace(/,/g, ", ");
   var rating = document.createElement('td');
   rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   if (courseRating === 'Not Found' && courseProfessor) {
