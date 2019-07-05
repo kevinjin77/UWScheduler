@@ -86,6 +86,28 @@ function getCoursesFromQuest(scheduleString, courseArr) {
 
 // On clicking Generate schedules, this function is fired.
 function submit() {
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var color = Chart.helpers.color;
+  var data = {
+    labels: ['Gap', 'Lunch', 'Professor'],
+    datasets: [{
+      label: 'Rating',
+      backgroundColor: 'rgba(0, 100, 0, 0.1)',
+      borderColor: 'rgba(0, 100, 0, 0.1)',
+      pointBackgroundColor: 'rgba(0, 100, 0, 0.1)',
+      data: [20, 10, 4]
+    }]
+  }
+  var options = {
+    legend: {
+      display: false
+    }
+  }
+  var myRadarChart = new Chart(ctx, {
+    type: 'radar',
+    data: data,
+    options: options
+});
   document.querySelector('#loading').MaterialProgress.setProgress(0);
   done = false;
   // Clear the page of any existing schedules.

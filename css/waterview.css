@@ -27,3 +27,19 @@
 .mdl-layout__container {
   position: relative;
 }
+
+.mdl-card {
+  width: 512px;
+}
+
+.mdl-card__media {
+  background-color: white;
+}
+
+.mdl-card__supporting-text {
+  width: auto;
+}
+
+.mdl-data-table {
+  width: 100%;
+}
