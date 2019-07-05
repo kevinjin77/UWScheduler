@@ -86,6 +86,7 @@ function getCoursesFromQuest(scheduleString, courseArr) {
 
 // On clicking Generate schedules, this function is fired.
 function submit() {
+  document.querySelector('#loading').MaterialProgress.setProgress(0);
   done = false;
   // Clear the page of any existing schedules.
   var myNode = document.getElementById("schedules");
@@ -94,6 +95,7 @@ function submit() {
   }
 
   // Display loading spinner.
+  document.getElementById("submit").style.display = 'none';
   document.getElementById("loading").style.display = 'block';
 
   // Based on user input, add courses to courseArr.
@@ -132,6 +134,7 @@ function submit() {
         alert(`Error! ${courseArr[i][0]}${courseArr[i][1]} is not being offered this term!`)
         error = true
         document.getElementById("loading").style.display = 'none'
+        document.getElementById("submit").style.display = 'flex';
       }
     }
 
@@ -162,10 +165,12 @@ function submit() {
       }
     }).then(() => {
       if (!error) {
+        document.querySelector('#loading').MaterialProgress.setProgress(20);
         generateSchedules(courses)
       } else {
         // If error occurred, hide loading spinner.
         document.getElementById("loading").style.display = 'none'
+        document.getElementById("submit").style.display = 'flex';
       }
     })
   }
@@ -218,6 +223,7 @@ function generateSchedules(courses) {
 
   if (schedules.length == 0) {
     document.getElementById("loading").style.display = 'none';
+    document.getElementById("submit").style.display = 'flex';
     alert(`No valid schedules can be made!`);
     return;
   }
@@ -288,9 +294,8 @@ function getTermDates(schedules) {
     startDate = `${year}-09-01`;
     endDate = `${year}-12-31`;
   }
-  console.log(startDate)
-  console.log(endDate)
 
+  document.querySelector('#loading').MaterialProgress.setProgress(30);
   calculateProfessorRating(schedules)
 }
 
@@ -410,6 +415,7 @@ function calculateProfessorRating(schedules) {
           }
           schedule.professorRating = totalRating / (schedule.length - numTuts)
         })
+        document.querySelector('#loading').MaterialProgress.setProgress(50);
         calculateGapRating(schedules)
         calculateLunchRating(schedules)
         calculateRating(schedules)
@@ -439,6 +445,8 @@ function calculateGapRating(schedules) {
     schedule.gapRating = getGapRating(schedule.mTimes) + getGapRating(schedule.tTimes)
     + getGapRating(schedule.wTimes) + getGapRating(schedule.thTimes) + getGapRating(schedule.fTimes)
   })
+
+  document.querySelector('#loading').MaterialProgress.setProgress(60);
 }
 
 function getLunchRating(times) {
@@ -467,14 +475,18 @@ function calculateLunchRating(schedules) {
     schedule.lunchRating = getLunchRating(schedule.mTimes) + getLunchRating(schedule.tTimes)
     + getLunchRating(schedule.wTimes) + getLunchRating(schedule.thTimes) + getLunchRating(schedule.fTimes)
   })
+
+  document.querySelector('#loading').MaterialProgress.setProgress(70);
 }
 
 function calculateRating(schedules) {
+  console.log(schedules)
   schedules.forEach(schedule => {
     schedule.overallRating = schedule.professorRating * 20 * (professorSlider.value / 5) +
     schedule.lunchRating * (lunchSlider.value / 5) +
     schedule.gapRating * (gapSlider.value / 5)
   })
   schedules.sort((a, b) => b.overallRating - a.overallRating)
+  document.querySelector('#loading').MaterialProgress.setProgress(90);
   printSchedules(schedules)
 }

@@ -40,7 +40,7 @@ function printClass(myClass, index) {
   location.innerHTML = courseLocation;
   var instructor = document.createElement('td');
   instructor.setAttribute('class', 'mdl-data-table__cell--non-numeric');
-  instructor.innerHTML = courseProfessor.replace(/,/g, ", ");
+  instructor.innerHTML = courseProfessor ? courseProfessor.replace(/,/g, ", ") : courseProfessor;
   var rating = document.createElement('td');
   rating.setAttribute('class', 'mdl-data-table__cell--non-numeric');
   if (courseRating === 'Not Found' && courseProfessor) {
@@ -80,6 +80,7 @@ function printClasses(schedule, index) {
 
 function printSchedules(schedules) {
   document.getElementById("loading").style.display = 'none';
+  document.getElementById("submit").style.display = 'flex';
   for (let i = 0; i < Math.min(schedules.length, 100); ++i) {
     let div = document.getElementById('schedules');
     let table = document.createElement('table');

@@ -27,116 +27,115 @@
   </head>
 
   <body>
-    <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
-    	<main class="mdl-layout__content">
-    		<div style="width: 100%;" class="mdl-card mdl-shadow--6dp">
-    			<div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-    				<h2 class="mdl-card__title-text">UWScheduler</h2>
-    			</div>
-          <div>
-            <div style="width: 50%; height: auto; float:left;">
-              <div style="display: block; overflow: visible;" class="mdl-card__supporting-text">
-                <h3>Course Information</h3>
-                <div style="padding-bottom:20px">
-                  <label style="padding-right: 20%;" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="manual">
-                    <input type="radio" id="manual" class="mdl-radio__button" name="options" value="1" checked>
-                    <span class="mdl-radio__label">Manual Entry</span>
-                  </label>
-                  <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="import">
-                    <input type="radio" id="import" class="mdl-radio__button" name="options" value="2">
-                    <span class="mdl-radio__label">Import From Quest</span>
-                  </label>
-                </div>
-        				<form id="form" action="#">
-                  <div style="display: block" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
-                    <input type="text" value="" class="mdl-textfield__input" readonly>
-                    <input id="termNumber" type="hidden" value="" name="term">
-                    <label for="term" class="mdl-textfield__label">Term</label>
-                    <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                      <li id="term0" class="mdl-menu__item"></li>
-                      <li id="term1" class="mdl-menu__item"></li>
-                      <li id="term2" class="mdl-menu__item"></li>
-                    </ul>
-                  </div>
-                  <div style="display: block; overflow: visible;"
-                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
-                    <input type="text" value="" class="mdl-textfield__input" id="numCourses" readonly>
-                    <input id="numCourses2" type="hidden" value="" name="numCourses">
-                    <label for="numCourses" class="mdl-textfield__label">How many courses are you taking?</label>
-                    <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                      <li class="mdl-menu__item" data-val="2">2</li>
-                      <li class="mdl-menu__item" data-val="3">3</li>
-                      <li class="mdl-menu__item" data-val="4">4</li>
-                      <li class="mdl-menu__item" data-val="5">5</li>
-                      <li class="mdl-menu__item" data-val="6">6</li>
-                      <li class="mdl-menu__item" data-val="7">7</li>
-                    </ul>
-                  </div>
-        				</form>
-                <form id="importForm" action = "#" style="display: none">
-                  <p>1. <a href="https://quest.pecs.uwaterloo.ca/psp/SS/?cmd=login&languageCd=ENG" target="_blank">Sign in to Quest</a>
-                    and click Enroll.</p>
-                  <p>2. Select all and copy. (List View)</p>
-                  <p>3. Paste into the box below!</p>
-                  <p>4. Click the "Generate Schedules" button below.</p>
-                  <div id="questBox" style="width: 100%;" class = "mdl-textfield mdl-js-textfield">
-                     <textarea class="mdl-textfield__input" type="text" rows="13" id="importQuest"></textarea>
-                     <label class = "mdl-textfield__label" for = "text7">Paste Here!</label>
-                  </div>
-               </form>
-        			</div>
+    <div>
+      <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
+        <main class="mdl-layout__content">
+          <div style="width: 100%;height: 100vh;position: relative;" class="mdl-card mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+              <h2 class="mdl-card__title-text">UWScheduler</h2>
             </div>
-            <div style="width: 50%; float:right;">
-              <div class="mdl-card__supporting-text">
-                <h3 style="margin-bottom: 0;">Preferences</h3>
-                <p style="margin-left: 20px;">Rate each of the following factors from 0 (not important) to 10 (very important).</p>
-                <div style="padding-bottom: 20px; text-align: center;">
-                  <strong>Gap</strong>
-                  <p>I want as few 70 minute gaps between classes as possible.</p>
-                  <input id="gapSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
-                  <p id="gapWeight">5</p>
+            <div>
+              <div style="width: 50%; height: auto; float:left;">
+                <div style="display: block; overflow: visible;" class="mdl-card__supporting-text">
+                  <h3>Course Information</h3>
+                  <div style="padding-bottom:20px">
+                    <label style="padding-right: 20%;" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="manual">
+                      <input type="radio" id="manual" class="mdl-radio__button" name="options" value="1" checked>
+                      <span class="mdl-radio__label">Manual Entry</span>
+                    </label>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="import">
+                      <input type="radio" id="import" class="mdl-radio__button" name="options" value="2">
+                      <span class="mdl-radio__label">Import From Quest</span>
+                    </label>
+                  </div>
+                  <form id="form" action="#">
+                    <div style="display: block" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+                      <input type="text" value="" class="mdl-textfield__input" readonly>
+                      <input id="termNumber" type="hidden" value="" name="term">
+                      <label for="term" class="mdl-textfield__label">Term</label>
+                      <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                        <li id="term0" class="mdl-menu__item"></li>
+                        <li id="term1" class="mdl-menu__item"></li>
+                        <li id="term2" class="mdl-menu__item"></li>
+                      </ul>
+                    </div>
+                    <div style="display: block; overflow: visible;"
+                    class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+                      <input type="text" value="" class="mdl-textfield__input" id="numCourses" readonly>
+                      <input id="numCourses2" type="hidden" value="" name="numCourses">
+                      <label for="numCourses" class="mdl-textfield__label">How many courses are you taking?</label>
+                      <ul for="term" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                        <li class="mdl-menu__item" data-val="2">2</li>
+                        <li class="mdl-menu__item" data-val="3">3</li>
+                        <li class="mdl-menu__item" data-val="4">4</li>
+                        <li class="mdl-menu__item" data-val="5">5</li>
+                        <li class="mdl-menu__item" data-val="6">6</li>
+                        <li class="mdl-menu__item" data-val="7">7</li>
+                      </ul>
+                    </div>
+                  </form>
+                  <form id="importForm" action = "#" style="display: none">
+                    <p>1. <a href="https://quest.pecs.uwaterloo.ca/psp/SS/?cmd=login&languageCd=ENG" target="_blank">Sign in to Quest</a>
+                      and click Enroll.</p>
+                    <p>2. Select all and copy. (List View)</p>
+                    <p>3. Paste into the box below!</p>
+                    <p>4. Click the "Generate Schedules" button below.</p>
+                    <div id="questBox" style="width: 100%;" class = "mdl-textfield mdl-js-textfield">
+                      <textarea class="mdl-textfield__input" type="text" rows="13" id="importQuest"></textarea>
+                      <label class = "mdl-textfield__label" for = "text7">Paste Here!</label>
+                    </div>
+                </form>
                 </div>
-                <div style="padding-bottom: 20px; text-align: center;">
-                  <strong>Lunch</strong>
-                  <p>I want to have as much time as possible for lunch.</p>
-                  <input id="lunchSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
-                  <p id="lunchWeight">5</p>
+              </div>
+              <div style="width: 50%; float:right;">
+                <div class="mdl-card__supporting-text">
+                  <h3 style="margin-bottom: 0;">Preferences</h3>
+                  <p style="margin-left: 20px;">Rate each of the following factors from 0 (not important) to 10 (very important).</p>
+                  <div style="padding-bottom: 20px; text-align: center;">
+                    <strong>Gap</strong>
+                    <p>I want as few 70 minute gaps between classes as possible.</p>
+                    <input id="gapSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                    <p id="gapWeight">5</p>
+                  </div>
+                  <div style="padding-bottom: 20px; text-align: center;">
+                    <strong>Lunch</strong>
+                    <p>I want to have as much time as possible for lunch.</p>
+                    <input id="lunchSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                    <p id="lunchWeight">5</p>
+                  </div>
+                  <div style="padding-bottom: 20px; text-align: center;">
+                    <strong>Professor</strong>
+                    <p>I want the best professors.</p>
+                    <input id="professorSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
+                    <p id="professorWeight">5</p>
+                  </div>
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
+                    <input type="checkbox" id="morning" class="mdl-checkbox__input" checked />
+                    <span class="mdl-checkbox__label">Allow 8:30AM Classes?</span> <!-- Checkbox Label -->
+                  </label>
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="night">
+                    <input type="checkbox" id="night" class="mdl-checkbox__input" checked />
+                    <span class="mdl-checkbox__label">Allow Night Classes? (After 6:00PM)</span> <!-- Checkbox Label -->
+                  </label>
                 </div>
-                <div style="padding-bottom: 20px; text-align: center;">
-                  <strong>Professor</strong>
-                  <p>I want the best professors.</p>
-                  <input id="professorSlider" class="mdl-slider mdl-js-slider" type="range" min="0" max="10" value="5" tabindex="0" step="1">
-                  <p id="professorWeight">5</p>
-                </div>
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="morning">
-                  <input type="checkbox" id="morning" class="mdl-checkbox__input" checked />
-                  <span class="mdl-checkbox__label">Allow 8:30AM Classes?</span> <!-- Checkbox Label -->
-                </label>
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="night">
-                  <input type="checkbox" id="night" class="mdl-checkbox__input" checked />
-                  <span class="mdl-checkbox__label">Allow Night Classes? (After 6:00PM)</span> <!-- Checkbox Label -->
-                </label>
-        			</div>
+              </div>
+            </div>
+            <div style="height: 100%; display: flex; align-items: center; justify-content: center;" class="mdl-card__actions mdl-card--border">
+              <div id="submit">
+                  <button
+                  style="display: flex;"
+                  onclick="submit()"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                    Generate Schedules
+                  </button>
+              </div>
+              <div id="loading" style="display:none;" class="mdl-progress mdl-js-progress"></div>
+            </div>
             </div>
           </div>
-    			<div style="text-align: center;" class="mdl-card__actions mdl-card--border">
-    				<button
-            style="display: inline-block;"
-            onclick="submit()"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-              Generate Schedules
-            </button>
-    			</div>
-          <div id="loading" style='height: 90px; margin-left: auto; margin-right: auto; display:none;'>
-            <div id='spinner' class="mdl-spinner mdl-js-spinner is-active"></div>
-            <div style="z-index: 999; margin-top: -55px;">
-              <p style='margin-left: auto; margin-right: auto; text-align: center;'>Loading</p>
-            </div>
-          </div>
-          <div id="noResults"><p style='margin-left: auto; margin-right: auto; text-align: center; display: none;'>Loading</p></div>
-          <div id='schedules'></div>
-    		</div>
-    	</main>
+        </main>
+      <div id="noResults"><p style='margin-left: auto; margin-right: auto; text-align: center; display: none;'>Loading</p></div>
+      <div id='schedules'></div>
     </div>
     <script src="./js/handleInput.js"></script>
     <script src="./js/generateSchedules.js"></script>

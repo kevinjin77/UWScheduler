@@ -23,3 +23,7 @@
 	left: 0;
  text-align: left;
 }
+
+.mdl-layout__container {
+  position: relative;
+}
