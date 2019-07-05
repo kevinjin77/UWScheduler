@@ -28,6 +28,10 @@
   position: relative;
 }
 
+.mdl-card__title-text {
+  font-weight: 500;
+}
+
 .mdl-card {
   width: 512px;
 }
