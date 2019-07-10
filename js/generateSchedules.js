@@ -181,15 +181,14 @@ function submit() {
 function isClassValid(myClass) {
   return !(!morning.checked && myClass.classes[0].date.start_time === '08:30')  &&
   !(!night.checked && new Date(`1/1/2016 ${myClass.classes[0].date.start_time}`) >= new Date("1/1/2016 18:00")) &&
-  !(myClass.campus !== 'UW U') && ((myClass.section.includes("LEC")) || (myClass.section.includes("TUT")))
+  ((myClass.section.includes("LEC")) || (myClass.section.includes("TUT")))
 }
 
 // If any two courses in a schedule overlap, it's considered invalid.
 function isScheduleValid(schedule) {
   for (let i = 0 ; i < schedule.length - 1; ++i) {
     for (let j = i+1; j < schedule.length; ++j) {
-      if (isConflict(schedule[i], schedule[j]) ||
-      schedule[i].campus !== "UW U" || schedule[j].campus !== "UW U") {
+      if (isConflict(schedule[i], schedule[j])) {
         return false
       }
     }
