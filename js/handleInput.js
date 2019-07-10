@@ -64,7 +64,7 @@ input.onchange = function () {
       document.getElementById(`course${i}Input`).remove();
     }
   }
-  let form = document.getElementById('form');
+  let coursesInput = document.getElementById('coursesInput');
   numCourses = document.getElementById('numCourses2').value;
   for (let i = 1; i <= numCourses; ++i) {
     let div = document.createElement('div');
@@ -91,7 +91,7 @@ input.onchange = function () {
     label.innerHTML = `Course ${i}`
     div.appendChild(input);
     div.appendChild(label);
-    form.appendChild(div);
+    coursesInput.appendChild(div);
   }
 };
 
